@@ -12,8 +12,15 @@ import { RouterModule } from '@angular/router';
 export class HeaderComponent {
   constructor() { }
   isActive = false;
+  isAuthenticated: boolean = false;
+  username: string = '';
 
   toggleNavbar() {
     this.isActive = !this.isActive;
+  }
+
+  toggleTheme() {
+    // TODO: Implement toggle dark mode or light mode
+    throw new Error('Method not implemented.');
   }
 }
