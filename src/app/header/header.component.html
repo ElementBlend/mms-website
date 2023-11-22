@@ -18,32 +18,17 @@
     </a>
   </div>
 
-  <div id="navbarBasic" class="navbar-menu" [class.is-active]="isActive">
+  <div id="navbarBasic" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" [routerLink]="'/'">
-        <p>Home</p>
+      @for (item of navbarItemsList; track item.name) {
+      <a
+        class="navbar-item"
+        [routerLink]="item.link"
+        routerLinkActive="is-active"
+      >
+        <p>{{ item.name }}</p>
       </a>
-      <a class="navbar-item" [routerLink]="'/installation'">
-        <p>Installation</p>
-      </a>
-      <a class="navbar-item" [routerLink]="'/download'">
-        <p>Download</p>
-      </a>
-      <a class="navbar-item" [routerLink]="'/statistic'">
-        <p>Statistic</p>
-      </a>
-      <a class="navbar-item" [routerLink]="'/gallery'">
-        <p>Gallery</p>
-      </a>
-      <a class="navbar-item" [routerLink]="'/contribute'">
-        <p>Contribute</p>
-      </a>
-      <a class="navbar-item" [routerLink]="'/certificate'">
-        <p>Certificate</p>
-      </a>
-      <a class="navbar-item" [routerLink]="'/application'">
-        <p>Application</p>
-      </a>
+      }
     </div>
   </div>
 

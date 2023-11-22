@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NavbarHeaderService } from '../navbar-header.service';
 
 @Component({
   selector: 'app-header',
@@ -10,10 +11,15 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  constructor() { }
+  constructor() {
+    this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
+  }
+
   isActive = false;
   isAuthenticated: boolean = false;
   username: string = '';
+  navbarItemsList: any[] = [];
+  navbarHeaderService: NavbarHeaderService = inject(NavbarHeaderService);
 
   toggleNavbar() {
     this.isActive = !this.isActive;
