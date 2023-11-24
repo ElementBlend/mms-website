@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<any>('/api/login').subscribe(data => {
+    this.http.post<any>('/api/login', {}).subscribe(data => {
       this.clientCN = data.clientCN;
     });
   }
