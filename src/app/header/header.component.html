@@ -18,7 +18,7 @@
     </a>
   </div>
 
-  <div id="navbarBasic" class="navbar-menu">
+  <div id="navbarBasic" class="navbar-menu" [class.is-active]="isActive">
     <div class="navbar-start">
       @for (item of navbarItemsList; track item.name) { @if (!item.requireAuth
       || isLoggedIn()) {

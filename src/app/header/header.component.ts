@@ -21,8 +21,15 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.post<any>('/api/login', {}).subscribe(data => {
-      this.clientCN = data.clientCN;
+    this.http.post<any>('/api/login', {}).subscribe({
+      next: (data) => {
+        this.clientCN = data.clientCN;
+      },
+      error: (error) => {
+        // This will be handled by Nginx in the production server so I just use a warning to handle it when you are debugging inside vs code with the ng serve command.
+        console.warn(error);
+        this.clientCN = 'Guest';
+      }
     });
   }
 
