@@ -70,7 +70,11 @@
               "buildTarget": "mms-website:build:production"
             },
             "development": {
-              "buildTarget": "mms-website:build:development"
+              "buildTarget": "mms-website:build:development",
+              "proxyConfig": "proxy.conf.json",
+              "ssl": true,
+              "sslKey": "ssl/server.key",
+              "sslCert": "ssl/server.crt"
             }
           },
           "defaultConfiguration": "development"

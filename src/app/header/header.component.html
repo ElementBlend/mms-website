@@ -47,8 +47,8 @@
     </div>
     <div class="navbar-item">
       <div class="column has-background-link has-text-white">
-        <p *ngIf="!isAuthenticated">Guest</p>
-        <p *ngIf="isAuthenticated">Logged in as {{ username }}</p>
+        <p *ngIf="clientCN === 'Guest'">Guest</p>
+        <p *ngIf="clientCN !== 'Guest'">{{ clientCN }}</p>
       </div>
     </div>
   </div>
