@@ -26,7 +26,15 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  toggleNavbar() {
+  isLoggedIn(): boolean {
+    if (this.clientCN !== 'Guest' && this.clientCN !== '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  toggleNavbar(): void {
     this.isActive = !this.isActive;
   }
 

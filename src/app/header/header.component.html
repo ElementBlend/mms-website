@@ -20,7 +20,8 @@
 
   <div id="navbarBasic" class="navbar-menu">
     <div class="navbar-start">
-      @for (item of navbarItemsList; track item.name) {
+      @for (item of navbarItemsList; track item.name) { @if (!item.requireAuth
+      || isLoggedIn()) {
       <a
         class="navbar-item"
         [routerLink]="item.link"
@@ -28,7 +29,7 @@
       >
         <p>{{ item.name }}</p>
       </a>
-      }
+      } }
     </div>
   </div>
 
@@ -47,8 +48,11 @@
     </div>
     <div class="navbar-item">
       <div class="column has-background-link has-text-white">
-        <p *ngIf="clientCN === 'Guest'">Guest</p>
-        <p *ngIf="clientCN !== 'Guest'">{{ clientCN }}</p>
+        @if (clientCN === 'Guest') {
+        <p>Guest</p>
+        } @else {
+        <p>{{ clientCN }}</p>
+        }
       </div>
     </div>
   </div>
