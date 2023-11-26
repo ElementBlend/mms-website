@@ -37,6 +37,7 @@
           type="checkbox"
           name="darkModeSwitch"
           class="switch"
+          [checked]="getThemeStatus()"
           (click)="toggleTheme()"
         />
         <label for="darkModeSwitch">Dark mode</label>

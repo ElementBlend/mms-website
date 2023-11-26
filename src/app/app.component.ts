@@ -1,5 +1,5 @@
-import { Component, Renderer2 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { DarkThemeService } from './dark-theme.service';
@@ -11,16 +11,20 @@ import { DarkThemeService } from './dark-theme.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService) { }
+export class AppComponent implements OnInit {
+  constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit() {
-    this.darkThemeService.isDarkTheme.subscribe(isDark => {
-      if (isDark) {
-        this.renderer.addClass(document.documentElement, 'dark-theme');
-      } else {
-        this.renderer.removeClass(document.documentElement, 'dark-theme');
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.darkThemeService.isDarkTheme.subscribe(isDark => {
+        if (isDark) {
+          this.renderer.addClass(document.documentElement, 'dark-theme');
+        } else {
+          if (document.documentElement.classList.contains('dark-theme')) {
+            this.renderer.removeClass(document.documentElement, 'dark-theme');
+          }
+        }
+      });
+    }
   }
 }
