@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarHeaderService } from '../navbar-header.service';
 import { HttpClient } from '@angular/common/http';
+import { DarkThemeService } from '../dark-theme.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,7 @@ export class HeaderComponent implements OnInit {
   navbarItemsList: any[] = [];
   clientCN: string = '';
 
-  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService) {
+  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService) {
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
   }
 
@@ -46,7 +47,6 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleTheme() {
-    // TODO: Implement toggle dark mode or light mode
-    throw new Error('Method not implemented.');
+    this.darkThemeService.toggleDarkTheme();
   }
 }
