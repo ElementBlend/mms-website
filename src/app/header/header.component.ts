@@ -27,8 +27,7 @@ export class HeaderComponent implements OnInit {
         this.clientCN = data.clientCN;
       },
       error: (error) => {
-        // This will be handled by Nginx in the production server so I just use a warning to handle it when you are debugging inside vs code with the ng serve command.
-        console.warn(error);
+        console.error("There are some error occurs: " + error.message);
         this.clientCN = 'Guest';
       }
     });
