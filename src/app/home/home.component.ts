@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TimelineModpackComponent } from "../timeline-modpack/timeline-modpack.component";
 
@@ -9,6 +9,10 @@ import { TimelineModpackComponent } from "../timeline-modpack/timeline-modpack.c
   styleUrl: './home.component.scss',
   imports: [CommonModule, TimelineModpackComponent]
 })
-export class HomeComponent {
-  constructor() { }
+export class HomeComponent implements OnInit {
+  constructor(private _elementRef: ElementRef) { }
+
+  ngOnInit(): void {
+    this._elementRef.nativeElement.removeAttribute("ng-version");
+  }
 }

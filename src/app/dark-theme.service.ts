@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,9 @@ export class DarkThemeService {
 
   toggleDarkTheme() {
     const newThemeValue = !this.isDarkThemeSubject.value;
+    const domainName = environment.production ? environment.domain : window.location.hostname;
     this.isDarkThemeSubject.next(!this.isDarkThemeSubject.value);
-    this.cookieService.set('isDarkTheme', newThemeValue.toString(), 1, '/');
+    this.cookieService.set('isDarkTheme', newThemeValue.toString(), 30, '/', domainName, true, 'Strict');
   }
 
   getTheme(): boolean {

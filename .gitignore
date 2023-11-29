@@ -46,3 +46,6 @@ Thumbs.db
 
 # Credential
 /ssl
+
+# Environment prod
+/src/environments/environment.ts

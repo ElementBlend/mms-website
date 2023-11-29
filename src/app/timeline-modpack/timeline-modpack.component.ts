@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TimelineModpackService } from '../timeline-modpack.service';
 
@@ -12,9 +12,10 @@ import { TimelineModpackService } from '../timeline-modpack.service';
 export class TimelineModpackComponent implements OnInit {
   timelineData: any[] = [];
 
-  constructor(private timelineService: TimelineModpackService) { }
+  constructor(private timelineService: TimelineModpackService, private _elementRef: ElementRef) { }
 
   ngOnInit(): void {
+    this._elementRef.nativeElement.removeAttribute("ng-version");
     this.getTimelineData();
   }
 

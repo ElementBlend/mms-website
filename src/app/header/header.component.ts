@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarHeaderService } from '../navbar-header.service';
@@ -17,11 +17,13 @@ export class HeaderComponent implements OnInit {
   navbarItemsList: any[] = [];
   clientCN: string = '';
 
-  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService) {
+  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private _elementRef: ElementRef) {
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
   }
 
   ngOnInit(): void {
+    this._elementRef.nativeElement.removeAttribute("ng-version");
+
     this.http.post<any>('/api/login', {}).subscribe({
       next: (data) => {
         this.clientCN = data.clientCN;

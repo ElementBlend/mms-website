@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
@@ -12,9 +12,11 @@ import { DarkThemeService } from './dark-theme.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService, @Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService, @Inject(PLATFORM_ID) private platformId: Object, private _elementRef: ElementRef) { }
 
   ngOnInit() {
+    this._elementRef.nativeElement.removeAttribute("ng-version");
+
     if (isPlatformBrowser(this.platformId)) {
       this.darkThemeService.isDarkTheme.subscribe(isDark => {
         if (isDark) {
