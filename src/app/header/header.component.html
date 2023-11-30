@@ -27,29 +27,28 @@
       </a>
       } }
     </div>
-  </div>
-
-  <div class="navbar-end">
-    <div class="navbar-item">
-      <div class="field">
-        <input
-          id="darkModeSwitch"
-          type="checkbox"
-          name="darkModeSwitch"
-          class="switch"
-          [checked]="getThemeStatus()"
-          (click)="toggleTheme()"
-        />
-        <label for="darkModeSwitch">Dark mode</label>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="field">
+          <input
+            id="darkModeSwitch"
+            type="checkbox"
+            name="darkModeSwitch"
+            class="switch"
+            [checked]="getThemeStatus()"
+            (click)="toggleTheme()"
+          />
+          <label for="darkModeSwitch">Dark mode</label>
+        </div>
       </div>
-    </div>
-    <div class="navbar-item">
-      <div class="column has-background-link has-text-white">
-        @if (clientCN === 'Guest') {
-        <p>Guest</p>
-        } @else {
-        <p>{{ clientCN }}</p>
-        }
+      <div class="navbar-item">
+        <div class="column has-background-link has-text-white">
+          @if (clientCN === 'Guest') {
+          <p>Guest</p>
+          } @else {
+          <p>{{ clientCN }}</p>
+          }
+        </div>
       </div>
     </div>
   </div>
