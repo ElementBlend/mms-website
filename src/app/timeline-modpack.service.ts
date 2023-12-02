@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TimelineModpackService {
   private apiUrl = '/api/timeline-modpack';
+  timelineData: any[] = [];
 
   constructor(private http: HttpClient) { }
 
