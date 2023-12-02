@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { NavbarHeaderService } from '../navbar-header.service';
 import { HttpClient } from '@angular/common/http';
 import { DarkThemeService } from '../dark-theme.service';
@@ -13,16 +13,17 @@ import { DarkThemeService } from '../dark-theme.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  isActive = false;
+  isActive: boolean = false;
   navbarItemsList: any[] = [];
   clientCN: string = '';
 
-  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private _elementRef: ElementRef) {
+  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private _elementRef: ElementRef, private router: Router) {
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
   }
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.toggleNavbarWhenPageChange();
 
     this.http.post<any>('/api/login', {}).subscribe({
       next: (data) => {
@@ -43,11 +44,21 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  toggleNavbar(): void {
-    this.isActive = !this.isActive;
+  toggleNavbarWhenPageChange(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (this.navbarHeaderService.getNavbarStatus() === true) {
+          this.toggleNavbar();
+        }
+      }
+    });
   }
 
-  toggleTheme() {
+  toggleNavbar(): void {
+    this.isActive = this.navbarHeaderService.toggleNavbar();
+  }
+
+  toggleTheme(): void {
     this.darkThemeService.toggleDarkTheme();
   }
 

@@ -16,24 +16,23 @@ export class TimelineModpackComponent implements OnInit {
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.getTimelineData();
+  }
 
+  getTimelineData(): void {
     if (this.timelineService.timelineData.length < 1) {
-      this.getTimelineData();
+      this.timelineService.getTimelineData().subscribe({
+        next: (data) => {
+          this.timelineData = data;
+          this.timelineService.timelineData = this.timelineData;
+        },
+        error: (error) => {
+          console.error("There are some error occurs: " + error.message);
+        }
+      });
     } else {
       this.timelineData = this.timelineService.timelineData;
     }
-  }
-
-  getTimelineData() {
-    this.timelineService.getTimelineData().subscribe({
-      next: (data) => {
-        this.timelineData = data;
-        this.timelineService.timelineData = this.timelineData;
-      },
-      error: (error) => {
-        console.error("There are some error occurs: " + error.message);
-      }
-    });
   }
 
   getObjectKeys(obj: any): string[] {
