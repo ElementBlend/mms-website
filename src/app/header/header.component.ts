@@ -2,8 +2,8 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { NavbarHeaderService } from '../navbar-header.service';
-import { HttpClient } from '@angular/common/http';
 import { DarkThemeService } from '../dark-theme.service';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-header',
@@ -15,33 +15,29 @@ import { DarkThemeService } from '../dark-theme.service';
 export class HeaderComponent implements OnInit {
   isActive: boolean = false;
   navbarItemsList: any[] = [];
-  clientCN: string = '';
 
-  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private _elementRef: ElementRef, private router: Router) {
+  constructor(private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private elementRef: ElementRef, private router: Router, private loginService: LoginService) {
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
   }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.elementRef.nativeElement.removeAttribute("ng-version");
+    this.login();
     this.toggleNavbarWhenPageChange();
+  }
 
-    this.http.post<any>('/api/login', {}).subscribe({
-      next: (data) => {
-        this.clientCN = data.clientCN;
-      },
-      error: (error) => {
-        console.error("There are some error occurs: " + error.message);
-        this.clientCN = 'Guest';
-      }
-    });
+  login(): void {
+    if (this.loginService.getUsername() === 'Guest') {
+      this.loginService.login();
+    }
+  }
+
+  getUsername(): string {
+    return this.loginService.getUsername();
   }
 
   isLoggedIn(): boolean {
-    if (this.clientCN !== 'Guest' && this.clientCN !== '') {
-      return true;
-    } else {
-      return false;
-    }
+    return this.loginService.getLoginStatus();
   }
 
   toggleNavbarWhenPageChange(): void {

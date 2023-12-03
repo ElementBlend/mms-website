@@ -17,7 +17,7 @@ export class DarkThemeService {
     }
   }
 
-  toggleDarkTheme() {
+  toggleDarkTheme(): void {
     const newThemeValue = !this.isDarkThemeSubject.value;
     const domainName = environment.production ? environment.domain : window.location.hostname;
     this.isDarkThemeSubject.next(!this.isDarkThemeSubject.value);

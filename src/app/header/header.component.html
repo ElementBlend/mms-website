@@ -43,11 +43,7 @@
       </div>
       <div class="navbar-item">
         <div class="column has-background-link has-text-white">
-          @if (clientCN === 'Guest') {
-          <p>Guest</p>
-          } @else {
-          <p>{{ clientCN }}</p>
-          }
+          <p>{{ getUsername() }}</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,17 @@
+<section class="hero is-primary">
+  <div class="hero-body">
+    <p class="title">Login</p>
+  </div>
+</section>
+
+<section class="section">
+  @if (getLoginStatus() === true) {
+  <p>You have been logged in</p>
+  } @else {
+  <p>You are not logged in yet</p>
+  <p>
+    Since we use two-way SSL for the login method, you have to restart your
+    browser to re-login if you believe you have the login authorization
+  </p>
+  }
+</section>

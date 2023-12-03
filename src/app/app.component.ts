@@ -14,9 +14,12 @@ import { DarkThemeService } from './dark-theme.service';
 export class AppComponent implements OnInit {
   constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService, @Inject(PLATFORM_ID) private platformId: Object, private _elementRef: ElementRef) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.onCheckDarkTheme();
+  }
 
+  onCheckDarkTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.darkThemeService.isDarkTheme.subscribe(isDark => {
         if (isDark) {
