@@ -41,14 +41,11 @@ export class TimelineModpackComponent implements OnInit {
 
   calculateVersionDuration(timeline: any): number {
     const dates = Object.keys(timeline);
-
     if (dates.length > 1) {
       const startDate = new Date(this.parseDate(dates[dates.length - 1]));
       const endDate = new Date(this.parseDate(dates[0]));
-
       const durationInMilliseconds = endDate.getTime() - startDate.getTime();
       const durationInDays = Math.floor(durationInMilliseconds / (1000 * 60 * 60 * 24));
-
       return durationInDays;
     } else {
       return 0;
@@ -56,19 +53,10 @@ export class TimelineModpackComponent implements OnInit {
   }
 
   parseDate(dateString: string): string {
-    const parts = dateString.split(' ');
-
-    const day = parseInt(parts[0]);
-    const month = this.getMonthNumber(parts[1].replace(',', ''));
-    const year = parseInt(parts[2]);
+    const parts = dateString.split('-');
+    const year = parts[0];
+    const month = parts[1];
+    const day = parts[2];
     return `${year}-${month}-${day}`;
-  }
-
-  getMonthNumber(monthName: string): string {
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July',
-      'August', 'September', 'October', 'November', 'December'
-    ];
-    return (monthNames.indexOf(monthName) + 1).toString().padStart(2, '0');
   }
 }
