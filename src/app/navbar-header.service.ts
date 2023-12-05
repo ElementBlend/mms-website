@@ -4,11 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class NavbarHeaderService {
-  isNarbarActive: boolean = false;
-
-  constructor() { }
-
-  navbarItems: any = [
+  private isNarbarActive: boolean = false;
+  private navbarItems: any = [
     { name: 'Home', link: '/' },
     { name: 'Installation', link: '/installation', requireAuth: true },
     { name: 'Download', link: '/download', requireAuth: true },
@@ -19,6 +16,8 @@ export class NavbarHeaderService {
     { name: 'Application', link: '/application' },
     { name: 'Login', link: '/login' }
   ];
+
+  constructor() { }
 
   getNavbarItems(): any[] {
     return this.navbarItems;

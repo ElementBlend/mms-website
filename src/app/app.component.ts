@@ -19,9 +19,9 @@ export class AppComponent implements OnInit {
     this.onCheckDarkTheme();
   }
 
-  onCheckDarkTheme(): void {
+  private onCheckDarkTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.darkThemeService.isDarkTheme.subscribe(isDark => {
+      this.darkThemeService.getisDarkTheme().subscribe(isDark => {
         if (isDark) {
           this.renderer.addClass(document.documentElement, 'dark-theme');
         } else {

@@ -22,7 +22,7 @@ export class LoginService {
     return this.clientCN;
   }
 
-  login(): void {
+  loginFromServer(): void {
     this.http.post<any>(this.loginUrl, {}).subscribe({
       next: (data) => {
         this.clientCN = data.clientCN;

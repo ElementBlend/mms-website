@@ -22,13 +22,13 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.elementRef.nativeElement.removeAttribute("ng-version");
-    this.login();
+    this.onlogin();
     this.toggleNavbarWhenPageChange();
   }
 
-  login(): void {
+  private onlogin(): void {
     if (this.loginService.getUsername() === 'Guest') {
-      this.loginService.login();
+      this.loginService.loginFromServer();
     }
   }
 
@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
     return this.loginService.getLoginStatus();
   }
 
-  toggleNavbarWhenPageChange(): void {
+  private toggleNavbarWhenPageChange(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         if (this.navbarHeaderService.getNavbarStatus() === true) {

@@ -1,12 +1,12 @@
 <div class="timeline is-centered">
-  @for (data of timelineData; track data.title) {
+  @for (data of getTimelineData(); track data.title) {
   <div
     class="timeline-item"
     [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }"
   >
     <header>
-      @if (calculateVersionDuration(data.timeline) > 1) { Date Duration:
-      {{ calculateVersionDuration(data.timeline) }} days }
+      @if (getVersionDuration(data.timeline) > 1) { Date Duration:
+      {{ getVersionDuration(data.timeline) }} days }
     </header>
   </div>
   @for (item of getObjectKeys(data.timeline); track item) {

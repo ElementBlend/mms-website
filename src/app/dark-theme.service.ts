@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -8,13 +8,17 @@ import { environment } from '../environments/environment';
 })
 export class DarkThemeService {
   private isDarkThemeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  isDarkTheme = this.isDarkThemeSubject.asObservable();
+  private isDarkTheme: Observable<boolean> = this.isDarkThemeSubject.asObservable();
 
   constructor(private cookieService: CookieService) {
     const storedPreference = this.cookieService.get('isDarkTheme');
     if (storedPreference) {
       this.isDarkThemeSubject.next(storedPreference === 'true');
     }
+  }
+
+  getisDarkTheme(): Observable<boolean> {
+    return this.isDarkTheme;
   }
 
   toggleDarkTheme(): void {
