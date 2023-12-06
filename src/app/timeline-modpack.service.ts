@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,10 @@ export class TimelineModpackService {
   constructor(private http: HttpClient) { }
 
   getTimelineDataFromServer(): void {
+    const apiKey = environment.apiKey;
+    const headers = new HttpHeaders().set('x-api-key', apiKey);
     if (this.timelineData.length < 1) {
-      this.http.get<any>(this.apiUrl, {}).subscribe({
+      this.http.get<any>(this.apiUrl, { headers }).subscribe({
         next: (data) => {
           this.timelineData = data;
         },
