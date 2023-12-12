@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginComponent } from './login/login.component';
+import { DownloadComponent } from './download/download.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   {
@@ -13,6 +15,12 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login'
+  },
+  {
+    path: 'download',
+    component: DownloadComponent,
+    canActivate: [authGuard],
+    title: 'Download'
   },
   {
     path: '404',

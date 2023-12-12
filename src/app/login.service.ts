@@ -6,12 +6,37 @@ import { Injectable } from '@angular/core';
 })
 export class LoginService {
   private loginUrl: string = '/api/login';
-  private clientCN: string = 'Guest';
+  private username: string = '';
 
   constructor(private http: HttpClient) { }
 
+  loginFromServer(): void {
+    if (this.username === '') {
+      this.http.post<any>(this.loginUrl, {}).subscribe({
+        next: (data) => {
+          this.username = data.clientCN;
+          if (data.clientCN !== 'Guest') {
+            sessionStorage.setItem('token', data.token);
+          }
+        },
+        error: (error) => {
+          console.error("There are some error occurs: " + error.message);
+        }
+      });
+    }
+  }
+
+  getToken(): string | null {
+    const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null;
+    return token;
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
   getLoginStatus(): boolean {
-    if (this.clientCN !== 'Guest') {
+    if (this.username !== '' && this.username !== 'Guest') {
       return true;
     } else {
       return false;
@@ -19,17 +44,6 @@ export class LoginService {
   }
 
   getUsername(): string {
-    return this.clientCN;
-  }
-
-  loginFromServer(): void {
-    this.http.post<any>(this.loginUrl, {}).subscribe({
-      next: (data) => {
-        this.clientCN = data.clientCN;
-      },
-      error: (error) => {
-        console.error("There are some error occurs: " + error.message);
-      }
-    });
+    return this.username;
   }
 }

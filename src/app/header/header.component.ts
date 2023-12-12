@@ -27,9 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   private onlogin(): void {
-    if (this.loginService.getUsername() === 'Guest') {
-      this.loginService.loginFromServer();
-    }
+    this.loginService.loginFromServer();
   }
 
   getUsername(): string {
