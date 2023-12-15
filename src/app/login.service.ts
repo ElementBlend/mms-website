@@ -1,23 +1,27 @@
-import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environments/environment';
+import { Observable, catchError, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private loginUrl: string = '/api/login';
   private username: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cookieService: CookieService) { }
 
   loginFromServer(): void {
     if (this.username === '') {
-      this.http.post<any>(this.loginUrl, {}).subscribe({
+      const loginUrl = '/api/login';
+      const apiKey = environment.apiKey;
+      const headers = new HttpHeaders().set('x-api-key', apiKey);
+      this.http.post<any>(loginUrl, { headers }).subscribe({
         next: (data) => {
+          const domainName = environment.production ? environment.domain : window.location.hostname;
           this.username = data.clientCN;
-          if (data.clientCN !== 'Guest') {
-            sessionStorage.setItem('token', data.token);
-          }
+          this.cookieService.set('username', data.clientCN, 0, '/', domainName, true, 'Strict');
         },
         error: (error) => {
           console.error("There are some error occurs: " + error.message);
@@ -26,13 +30,21 @@ export class LoginService {
     }
   }
 
-  getToken(): string | null {
-    const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null;
-    return token;
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+  checkLoginTokenFromServer(): Observable<boolean> {
+    if (this.username !== '' && this.username !== 'Guest') {
+      const authUrl: string = '/api/authToken';
+      return this.http.post<any>(authUrl, {}).pipe(
+        map(() => {
+          return true;
+        }),
+        catchError((error) => {
+          console.error("There are some error occurs: " + error.message);
+          return of(false);
+        })
+      );
+    } else {
+      return of(false);
+    }
   }
 
   getLoginStatus(): boolean {
@@ -44,6 +56,9 @@ export class LoginService {
   }
 
   getUsername(): string {
+    if (this.username === '') {
+      this.username = this.cookieService.get('username');
+    }
     return this.username;
   }
 }

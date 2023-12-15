@@ -1,24 +1,26 @@
-import { LoginService } from './login.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DownloadService {
-  private downloadUrl: string = '/api/download';
+  private modpackData: any[] = [];
+  private hasGetModpackData: boolean = false; // Temp
 
-  constructor(private http: HttpClient, private loginService: LoginService) { }
+  constructor(private http: HttpClient) { }
 
   downloadFromServer(): void {
-    const headers = new HttpHeaders().set('authorization', 'Bearer ' + this.loginService.getToken());
-    this.http.get<any>(this.downloadUrl, { headers }).subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      error: (error) => {
-        console.error("There are some error occurs: " + error.message);
-      }
-    });
+    if (this.hasGetModpackData === false) {
+      const downloadUrl = '/api/download';
+      this.http.get<any>(downloadUrl, {}).subscribe({
+        next: (data) => {
+          this.hasGetModpackData = true;
+        },
+        error: (error) => {
+          console.error("There are some error occurs: " + error.message);
+        }
+      });
+    }
   }
 }

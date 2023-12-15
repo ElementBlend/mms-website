@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { NavbarHeaderService } from '../navbar-header.service';
 import { DarkThemeService } from '../dark-theme.service';
@@ -8,7 +7,7 @@ import { LoginService } from '../login.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -38,6 +37,10 @@ export class HeaderComponent implements OnInit {
     return this.loginService.getLoginStatus();
   }
 
+  getThemeStatus(): boolean {
+    return this.darkThemeService.getTheme();
+  }
+
   private toggleNavbarWhenPageChange(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
@@ -54,9 +57,5 @@ export class HeaderComponent implements OnInit {
 
   toggleTheme(): void {
     this.darkThemeService.toggleDarkTheme();
-  }
-
-  getThemeStatus(): boolean {
-    return this.darkThemeService.getTheme();
   }
 }

@@ -6,16 +6,16 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class TimelineModpackService {
-  private apiUrl: string = '/api/timeline-modpack';
   private timelineData: any[] = [];
 
   constructor(private http: HttpClient) { }
 
   getTimelineDataFromServer(): void {
-    const apiKey = environment.apiKey;
-    const headers = new HttpHeaders().set('x-api-key', apiKey);
     if (this.timelineData.length < 1) {
-      this.http.get<any>(this.apiUrl, { headers }).subscribe({
+      const apiUrl = '/api/timeline-modpack';
+      const apiKey = environment.apiKey;
+      const headers = new HttpHeaders().set('x-api-key', apiKey);
+      this.http.get<any>(apiUrl, { headers }).subscribe({
         next: (data) => {
           this.timelineData = data;
         },

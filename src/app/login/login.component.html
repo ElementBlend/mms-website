@@ -6,12 +6,16 @@
 
 <section class="section">
   @if (getLoginStatus() === true) {
-  <p>You have been logged in</p>
+  <div class="has-text-centered has-text-success label">
+    <p>You have been logged in</p>
+  </div>
   } @else {
-  <p>You are not logged in yet</p>
-  <p>
-    Since we use two-way SSL for the login method, you have to restart your
-    browser to re-login if you believe you have the login authorization
-  </p>
+  <div class="has-text-centered has-text-danger label">
+    <p>You are not logged in yet</p>
+    <p>
+      Since we use two-way SSL for the login method, you have to restart your
+      browser to re-login if you believe you have the login authorization
+    </p>
+  </div>
   }
 </section>
