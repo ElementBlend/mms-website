@@ -1,4 +1,3 @@
-import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
@@ -10,7 +9,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 export class LoginService {
   private username: string = '';
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient) { }
 
   loginFromServer(): void {
     if (this.username === '') {
@@ -19,9 +18,8 @@ export class LoginService {
       const headers = new HttpHeaders().set('x-api-key', apiKey);
       this.http.post<any>(loginUrl, { headers }).subscribe({
         next: (data) => {
-          const domainName = environment.production ? environment.domain : window.location.hostname;
           this.username = data.clientCN;
-          this.cookieService.set('username', data.clientCN, 0, '/', domainName, true, 'Strict');
+          sessionStorage.setItem('username', data.clientCN);
         },
         error: (error) => {
           console.error("There are some error occurs: " + error.message);
@@ -57,7 +55,10 @@ export class LoginService {
 
   getUsername(): string {
     if (this.username === '') {
-      this.username = this.cookieService.get('username');
+      const currentUsername = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('username') : null;
+      if (currentUsername) {
+        this.username = currentUsername;
+      }
     }
     return this.username;
   }
