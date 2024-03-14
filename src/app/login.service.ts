@@ -13,10 +13,10 @@ export class LoginService {
 
   loginFromServer(): void {
     if (this.username === '') {
-      const loginUrl = '/api/login';
+      const loginUrl = '/api/v1/auth/login';
       const apiKey = environment.apiKey;
       const headers = new HttpHeaders().set('x-api-key', apiKey);
-      this.http.post<any>(loginUrl, { headers }).subscribe({
+      this.http.get<any>(loginUrl, { headers }).subscribe({
         next: (data) => {
           this.username = data.clientCN;
           sessionStorage.setItem('username', data.clientCN);
