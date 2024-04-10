@@ -13,7 +13,7 @@ export class DownloadComponent {
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
-    this.onDownload();
+    // this.onDownload();
   }
 
   onDownload(): void {

@@ -30,8 +30,8 @@ export class LoginService {
 
   checkLoginTokenFromServer(): Observable<boolean> {
     if (this.username !== '' && this.username !== 'Guest') {
-      const authUrl: string = '/api/authToken';
-      return this.http.post<any>(authUrl, {}).pipe(
+      const authUrl: string = '/api/v1/auth/token';
+      return this.http.get<any>(authUrl, {}).pipe(
         map(() => {
           return true;
         }),
