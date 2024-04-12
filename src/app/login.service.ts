@@ -13,10 +13,10 @@ export class LoginService {
 
   loginFromServer(): void {
     if (this.username === '') {
-      const loginUrl = '/api/login';
+      const loginUrl = '/api/v1/auth/login';
       const apiKey = environment.apiKey;
       const headers = new HttpHeaders().set('x-api-key', apiKey);
-      this.http.post<any>(loginUrl, { headers }).subscribe({
+      this.http.get<any>(loginUrl, { headers }).subscribe({
         next: (data) => {
           this.username = data.clientCN;
           sessionStorage.setItem('username', data.clientCN);
@@ -30,8 +30,8 @@ export class LoginService {
 
   checkLoginTokenFromServer(): Observable<boolean> {
     if (this.username !== '' && this.username !== 'Guest') {
-      const authUrl: string = '/api/authToken';
-      return this.http.post<any>(authUrl, {}).pipe(
+      const authUrl: string = '/api/v1/auth/token';
+      return this.http.get<any>(authUrl, {}).pipe(
         map(() => {
           return true;
         }),

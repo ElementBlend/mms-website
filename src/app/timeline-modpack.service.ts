@@ -12,12 +12,12 @@ export class TimelineModpackService {
 
   getTimelineDataFromServer(): void {
     if (this.timelineData.length < 1) {
-      const apiUrl = '/api/timeline-modpack';
+      const apiUrl = '/api/v1/modpacks/timelines';
       const apiKey = environment.apiKey;
       const headers = new HttpHeaders().set('x-api-key', apiKey);
       this.http.get<any>(apiUrl, { headers }).subscribe({
         next: (data) => {
-          this.timelineData = data;
+          this.timelineData = data.data;
         },
         error: (error) => {
           console.error("There are some error occurs: " + error.message);
