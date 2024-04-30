@@ -18,7 +18,7 @@
   }
   <div class="timeline-item" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
     <header>
-      @if (getVersionDuration(data.timeline) > 1) {
+      @if (getVersionDuration(data.timeline) > 1 && !data.inProgress) {
       Total Duration in {{ data.title }}: {{ getVersionDuration(data.timeline) }} days
       }
     </header>
