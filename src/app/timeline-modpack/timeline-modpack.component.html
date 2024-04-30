@@ -1,23 +1,9 @@
 <div class="timeline is-centered">
   @for (data of getTimelineData(); track data.title) {
-  <div
-    class="timeline-item"
-    [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }"
-  >
-    <header>
-      @if (getVersionDuration(data.timeline) > 1) { Date Duration:
-      {{ getVersionDuration(data.timeline) }} days }
-    </header>
-  </div>
   @for (item of getObjectKeys(data.timeline); track item) {
-  <div
-    class="timeline-item"
-    [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }"
-  >
-    <div
-      class="timeline-marker"
-      [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }"
-    ></div>
+  <div class="timeline-item" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
+    <div class="timeline-marker" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
+    </div>
     <div class="timeline-content">
       <p class="heading">
         {{ item }}
@@ -30,11 +16,15 @@
     </div>
   </div>
   }
+  <div class="timeline-item" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
+    <header>
+      @if (getVersionDuration(data.timeline) > 1) {
+      Total Duration in {{ data.title }}: {{ getVersionDuration(data.timeline) }} days
+      }
+    </header>
+  </div>
   <header class="timeline-header">
-    <span
-      class="tag is-large"
-      [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }"
-    >
+    <span class="tag is-large" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
       {{ data.title }}
     </span>
   </header>
