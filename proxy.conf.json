@@ -1,21 +1,16 @@
 {
   "/api/v1/auth/login": {
-    "target": "https://127.0.0.1:3000",
+    "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   },
   "/api/v1/modpacks/timelines": {
-    "target": "https://127.0.0.1:3000",
-    "secure": false,
-    "logLevel": "debug"
-  },
-  "/api/download": {
-    "target": "https://127.0.0.1:3000",
+    "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   },
   "/api/v1/auth/token": {
-    "target": "https://127.0.0.1:3000",
+    "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   }

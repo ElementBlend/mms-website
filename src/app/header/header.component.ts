@@ -22,11 +22,21 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.elementRef.nativeElement.removeAttribute("ng-version");
     this.onlogin();
-    this.toggleNavbarWhenPageChange();
+    this.closeMobileNavbar();
   }
 
   private onlogin(): void {
     this.loginService.loginFromServer();
+  }
+
+  private closeMobileNavbar(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (this.navbarHeaderService.getNavbarStatus() === true) {
+          this.toggleMobileNavbar();
+        }
+      }
+    });
   }
 
   getUsername(): string {
@@ -41,17 +51,7 @@ export class HeaderComponent implements OnInit {
     return this.darkThemeService.getTheme();
   }
 
-  private toggleNavbarWhenPageChange(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        if (this.navbarHeaderService.getNavbarStatus() === true) {
-          this.toggleNavbar();
-        }
-      }
-    });
-  }
-
-  toggleNavbar(): void {
+  toggleMobileNavbar(): void {
     this.isActive = this.navbarHeaderService.toggleNavbar();
   }
 

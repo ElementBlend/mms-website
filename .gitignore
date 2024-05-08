@@ -45,7 +45,8 @@ Thumbs.db
 .firebase
 
 # Credential
-/ssl
+/ssl/*
+!/ssl/.gitkeep
 
 # Environment prod
 /src/environments/environment.ts
