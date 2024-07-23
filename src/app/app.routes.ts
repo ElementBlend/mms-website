@@ -4,6 +4,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { LoginComponent } from './login/login.component';
 import { DownloadComponent } from './download/download.component';
 import { authGuard } from './auth.guard';
+import { ContributeComponent } from './contribute/contribute.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,11 @@ export const routes: Routes = [
     component: DownloadComponent,
     canActivate: [authGuard],
     title: 'Download'
+  },
+  {
+    path: 'contribute',
+    component: ContributeComponent,
+    title: 'Contribute'
   },
   {
     path: '404',
