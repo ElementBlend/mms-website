@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DownloadComponent } from './download.component';
 
 describe('DownloadComponent', () => {
@@ -9,8 +8,7 @@ describe('DownloadComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DownloadComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DownloadComponent);
     component = fixture.componentInstance;

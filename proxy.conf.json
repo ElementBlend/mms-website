@@ -13,5 +13,10 @@
     "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
+  },
+  "/api/v1/modpacks/versions": {
+    "target": "https://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
   }
 }

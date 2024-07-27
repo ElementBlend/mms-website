@@ -1,9 +1,65 @@
 <section class="hero is-primary">
   <div class="hero-body">
-    <p class="title">Download</p>
+    <h1 class="title">Download</h1>
   </div>
 </section>
 
 <section class="section">
-  <p>download works!</p>
+  <div class="field">
+    <label class="label">Select Modpack Version</label>
+    <div class="control">
+      <div class="select">
+        <select [(ngModel)]="selectedVersion">
+          @for (version of getModpackVersion(); track version) {
+          <option value={{version}}>Version {{version}}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Select Download Option</label>
+    <div class="control">
+      <div class="select">
+        <select [(ngModel)]="selectedDownloadOption">
+          <option value="modpack">Modpack</option>
+          <option value="world">World</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  @if (selectedDownloadOption === 'modpack') {
+  <div class="field">
+    <label class="label">Select Modpack Type</label>
+    <div class="control">
+      <div class="select">
+        <select [(ngModel)]="selectedOption">
+          <option value="fullInstaller">Full Installer</option>
+          <option value="updatePatches">Update Patches</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Select OS</label>
+    <div class="control">
+      <div class="select">
+        <select [(ngModel)]="selectedOS">
+          <option value="windows">Windows</option>
+          <option value="mac">Mac</option>
+          <option value="linux">Linux</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  }
+
+  <div class="field is-grouped mt-5">
+    <div class="control">
+      <button class="button is-primary" (click)="onDownload()">Download</button>
+    </div>
+  </div>
 </section>

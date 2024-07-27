@@ -24,7 +24,6 @@ $text: #f5f5f5;
   }
 
   .navbar-item {
-    background-color: $background;
     color: $text;
   }
 
@@ -34,6 +33,14 @@ $text: #f5f5f5;
 
   .footer {
     background-color: $background;
+    color: $text;
+  }
+
+  .subtitle {
+    color: $text;
+  }
+
+  .label {
     color: $text;
   }
 }
