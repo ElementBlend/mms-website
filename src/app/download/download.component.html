@@ -10,7 +10,7 @@
     <div class="control">
       <div class="select">
         <select [(ngModel)]="selectedVersion">
-          @for (version of getModpackVersion(); track version) {
+          @for (version of getModpackVersions(); track version) {
           <option value={{version}}>Version {{version}}</option>
           }
         </select>
@@ -22,7 +22,7 @@
     <label class="label">Select Download Option</label>
     <div class="control">
       <div class="select">
-        <select [(ngModel)]="selectedDownloadOption">
+        <select [(ngModel)]="selectedDownloadOption" (change)="onSelectionChanged()">
           <option value="modpack">Modpack</option>
           <option value="world">World</option>
         </select>
@@ -35,9 +35,9 @@
     <label class="label">Select Modpack Type</label>
     <div class="control">
       <div class="select">
-        <select [(ngModel)]="selectedOption">
-          <option value="fullInstaller">Full Installer</option>
-          <option value="updatePatches">Update Patches</option>
+        <select [(ngModel)]="selectedType" (change)="onSelectionChanged()">
+          <option value="full-installer">Full Installer</option>
+          <option value="update-patches">Update Patches</option>
         </select>
       </div>
     </div>
@@ -47,7 +47,7 @@
     <label class="label">Select OS</label>
     <div class="control">
       <div class="select">
-        <select [(ngModel)]="selectedOS">
+        <select [(ngModel)]="selectedOS" (change)="onSelectionChanged()">
           <option value="windows">Windows</option>
           <option value="mac">Mac</option>
           <option value="linux">Linux</option>
@@ -59,7 +59,9 @@
 
   <div class="field is-grouped mt-5">
     <div class="control">
-      <button class="button is-primary" (click)="onDownload()">Download</button>
+      <button
+        [ngClass]="{'button': true, 'is-primary': checkisDownloadEnabled(), 'is-danger': !checkisDownloadEnabled()}"
+        [disabled]="!checkisDownloadEnabled()" (click)="onDownloadButtonClicked()">Download</button>
     </div>
   </div>
 </section>

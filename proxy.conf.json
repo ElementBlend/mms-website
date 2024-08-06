@@ -4,12 +4,12 @@
     "secure": false,
     "logLevel": "debug"
   },
-  "/api/v1/modpacks/timelines": {
+  "/api/v1/auth/token": {
     "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
   },
-  "/api/v1/auth/token": {
+  "/api/v1/modpacks/timelines": {
     "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
@@ -18,5 +18,13 @@
     "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug"
+  },
+  "/api/v1/modpacks": {
+    "target": "https://localhost:3000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/v1/modpacks/(.*)": "/api/v1/modpacks/$1"
+    }
   }
 }

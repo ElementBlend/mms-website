@@ -1,36 +1,47 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DownloadService {
-  private backendDomain = environment.backendDomain;
-  private backendPort = environment.backendPort;
-  private modpackVersion: number[] = [];
+  private backendDomain: string = environment.backendDomain;
+  private backendPort: number = environment.backendPort;
+  private modpackVersions: number[] = [];
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
 
-  getModpackVersionFromServer(): void {
-    if (this.modpackVersion.length === 0) {
-      let modpackUrl = "";
-      if (isPlatformServer(this.platformId)) {
-        modpackUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/versions`;
-      } else {
-        modpackUrl = "/api/v1/modpacks/versions";
-      }
-
-      this.http.get<any>(modpackUrl).subscribe({
-        next: (data) => {
-          this.modpackVersion = data.versions;
-        }
-      });
-    }
+  updateModpackVersions(versions: number[]): void {
+    this.modpackVersions = versions;
   }
 
-  getModpackVersion(): number[] {
-    return this.modpackVersion;
+  getModpackVersions(): number[] {
+    return this.modpackVersions;
+  }
+
+  getModpackVersionDataFromServer(): Observable<Object> {
+    let modpackUrl: string = "";
+    if (isPlatformServer(this.platformId)) {
+      modpackUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/versions`;
+    } else {
+      modpackUrl = "/api/v1/modpacks/versions";
+    }
+    return this.http.get(modpackUrl);
+  }
+
+  getDownloadModpackUrlFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<HttpResponse<Blob>> {
+    let downloadUrl: string = "";
+    const webApiKey = environment.webApiKey;
+    const headers = new HttpHeaders().set('x-web-api-key', webApiKey);
+
+    if (isPlatformServer(this.platformId)) {
+      downloadUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/${selectedVersion}/file?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
+    } else {
+      downloadUrl = `/api/v1/modpacks/${selectedVersion}/file?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
+    }
+    return this.http.patch(downloadUrl, null, { headers: headers, observe: 'response', responseType: 'blob' });
   }
 }
