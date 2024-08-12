@@ -25,15 +25,27 @@ export class ContributeComponent implements OnInit {
       "HongKongMapping"
     ];
     this.contributerAvatars = [
-      "https://avatars.githubusercontent.com/u/48656764?v=4",
-      "https://avatars.githubusercontent.com/u/37017127?v=4",
-      "https://avatars.githubusercontent.com/u/65012377?v=4"
+      "/assets/images/contributes/samlam140330.jpg",
+      "/assets/images/contributes/lhemon412.jpg",
+      "/assets/images/contributes/hongkongmapping.jpg"
     ];
     this.contributerRoles = [
       "Founder, Owner",
       "Code optimization",
       "Timeline maintainer"
     ];
+  }
+
+  protected getContributerNames(): String[] {
+    return this.contributerNames;
+  }
+
+  protected getContributerAvatars(index: number): String {
+    return this.contributerAvatars[index];
+  }
+
+  protected getContributerRoles(index: number): String {
+    return this.contributerRoles[index];
   }
 
   // Problem: Github API has a rate limit of 60 requests per hour for unauthenticated users
@@ -47,16 +59,4 @@ export class ContributeComponent implements OnInit {
   //       });
   //   });
   // }
-
-  getContributerNames(): String[] {
-    return this.contributerNames;
-  }
-
-  getContributerAvatars(index: number): String {
-    return this.contributerAvatars[index];
-  }
-
-  getContributerRoles(index: number): String {
-    return this.contributerRoles[index];
-  }
 }
