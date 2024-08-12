@@ -20,6 +20,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
   protected selectedType: string = "full-installer";
   protected selectedOS: string = "windows";
   private isDownloadEnabled: boolean = true;
+  private downloadTimeout: any = null;
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _elementRef: ElementRef, private downloadService: DownloadService) { }
@@ -58,12 +59,18 @@ export class DownloadComponent implements OnInit, OnDestroy {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      this.isDownloadEnabled = false;
+      this.downloadTimeout = setTimeout(() => {
+        this.isDownloadEnabled = true;
+      }, 5000);
     }
   }
 
   ngOnDestroy(): void {
     this.destroySubscription.next(true);
     this.destroySubscription.complete();
+    clearTimeout(this.downloadTimeout);
   }
 
   // Temp function for removeing other options since they are not implemented
