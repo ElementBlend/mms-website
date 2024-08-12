@@ -3,7 +3,7 @@ import { DownloadService } from './../download.service';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-download',
@@ -48,33 +48,11 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   protected onDownloadButtonClicked(): void {
-    if (this.selectedDownloadOption === "world") {
+    if (this.selectedDownloadOption !== "modpack") {
       throw new Error("World download is not implemented yet.");
     } else {
-      this.downloadService.getDownloadModpackUrlFromServer(this.selectedVersion, this.selectedDownloadOption, this.selectedType, this.selectedOS)
-        .pipe(takeUntil(this.destroySubscription))
-        .subscribe((response: HttpResponse<Blob>) => {
-          const contentDisposition = response.headers.get('Content-Disposition');
-          let fileName: string = `mms_v${this.selectedVersion}_${this.selectedDownloadOption}`;
-
-          if (contentDisposition) {
-            const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-            const matches = filenameRegex.exec(contentDisposition);
-            if (matches && matches[1]) {
-              fileName = matches[1].replace(/['"]/g, '');
-            }
-          }
-
-          const blob = new Blob([response.body as BlobPart], { type: 'application/x-7z-compressed' });
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(link);
-        });
+      const url = this.downloadService.getDownloadModpackUrlFromServer(this.selectedVersion, this.selectedDownloadOption, this.selectedType, this.selectedOS);
+      saveAs(url);
     }
   }
 

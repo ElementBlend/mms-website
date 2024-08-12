@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
@@ -32,16 +32,13 @@ export class DownloadService {
     return this.http.get(modpackUrl);
   }
 
-  getDownloadModpackUrlFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<HttpResponse<Blob>> {
+  getDownloadModpackUrlFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): string {
     let downloadUrl: string = "";
-    const webApiKey = environment.webApiKey;
-    const headers = new HttpHeaders().set('x-web-api-key', webApiKey);
-
     if (isPlatformServer(this.platformId)) {
       downloadUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/${selectedVersion}/file?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
     } else {
       downloadUrl = `/api/v1/modpacks/${selectedVersion}/file?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
     }
-    return this.http.patch(downloadUrl, null, { headers: headers, observe: 'response', responseType: 'blob' });
+    return downloadUrl;
   }
 }
