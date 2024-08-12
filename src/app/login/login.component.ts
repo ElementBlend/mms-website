@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
     this._elementRef.nativeElement.removeAttribute("ng-version");
   }
 
-  getLoginStatus(): boolean {
+  protected getLoginStatus(): boolean {
     return this.loginService.getLoginStatus();
   }
 }

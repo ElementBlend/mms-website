@@ -1,6 +1,7 @@
-import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, OnDestroy, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { HeaderComponent } from './header/header.component';
 import { DarkThemeService } from './dark-theme.service';
 import { FooterComponent } from './footer/footer.component';
@@ -12,7 +13,9 @@ import { FooterComponent } from './footer/footer.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private destroySubscription: Subject<boolean> = new Subject<boolean>();
+
   constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService, @Inject(PLATFORM_ID) private platformId: Object, private _elementRef: ElementRef) { }
 
   ngOnInit(): void {
@@ -22,15 +25,22 @@ export class AppComponent implements OnInit {
 
   private onCheckDarkTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.darkThemeService.getisDarkTheme().subscribe(isDark => {
-        if (isDark) {
-          this.renderer.addClass(document.documentElement, 'dark-theme');
-        } else {
-          if (document.documentElement.classList.contains('dark-theme')) {
-            this.renderer.removeClass(document.documentElement, 'dark-theme');
+      this.darkThemeService.getisDarkTheme()
+        .pipe(takeUntil(this.destroySubscription))
+        .subscribe(isDark => {
+          if (isDark) {
+            this.renderer.addClass(document.documentElement, 'dark-theme');
+          } else {
+            if (document.documentElement.classList.contains('dark-theme')) {
+              this.renderer.removeClass(document.documentElement, 'dark-theme');
+            }
           }
-        }
-      });
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroySubscription.next(true);
+    this.destroySubscription.complete();
   }
 }

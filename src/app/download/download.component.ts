@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { DownloadService } from './../download.service';
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { saveAs } from 'file-saver';
+import { DownloadService } from './../download.service';
 
 @Component({
   selector: 'app-download',
@@ -27,16 +26,17 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.subscribeModpackVersion();
+  }
 
-    if (this.getModpackVersions().length === 0) {
-      this.downloadService.getModpackVersionDataFromServer()
-        .pipe(takeUntil(this.destroySubscription))
-        .subscribe({
-          next: (data: any) => {
-            this.downloadService.updateModpackVersions(data.versions);
-          }
-        });
-    }
+  private subscribeModpackVersion(): void {
+    this.downloadService.getModpackVersionDataFromServer()
+      .pipe(takeUntil(this.destroySubscription))
+      .subscribe({
+        next: (data: any) => {
+          this.downloadService.updateModpackVersions(data.versions);
+        }
+      });
   }
 
   protected getModpackVersions(): number[] {
@@ -52,7 +52,12 @@ export class DownloadComponent implements OnInit, OnDestroy {
       throw new Error("World download is not implemented yet.");
     } else {
       const url = this.downloadService.getDownloadModpackUrlFromServer(this.selectedVersion, this.selectedDownloadOption, this.selectedType, this.selectedOS);
-      saveAs(url);
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   }
 

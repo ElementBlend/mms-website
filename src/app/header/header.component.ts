@@ -1,5 +1,8 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 import { NavbarHeaderService } from '../navbar-header.service';
 import { DarkThemeService } from '../dark-theme.service';
 import { LoginService } from '../login.service';
@@ -11,51 +14,68 @@ import { LoginService } from '../login.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-  isActive: boolean = false;
-  navbarItemsList: any[] = [];
+export class HeaderComponent implements OnInit, OnDestroy {
+  protected isActive: boolean = false;
+  protected navbarItemsList: any[] = [];
+  private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private elementRef: ElementRef, private router: Router, private loginService: LoginService) {
-    this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
-  }
+  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private loginService: LoginService, private elementRef: ElementRef, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.elementRef.nativeElement.removeAttribute("ng-version");
+    this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
     this.onlogin();
     this.closeMobileNavbar();
   }
 
   private onlogin(): void {
-    this.loginService.loginFromServer();
+    const loginUrl = this.loginService.loginFromServer();
+    this.http.get<any>(loginUrl)
+      .pipe(takeUntil(this.destroySubscription))
+      .subscribe({
+        next: (data) => {
+          this.loginService.updateUsername(data.clientCN);
+          if (this.loginService.getUsername() !== '' && isPlatformBrowser(this.platformId)) {
+            sessionStorage.setItem("username", data.clientCN);
+          }
+        }
+      });
   }
 
   private closeMobileNavbar(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        if (this.navbarHeaderService.getNavbarStatus() === true) {
-          this.toggleMobileNavbar();
+    this.router.events
+      .pipe(takeUntil(this.destroySubscription))
+      .subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          if (this.navbarHeaderService.getNavbarStatus() === true) {
+            this.toggleMobileNavbar();
+          }
         }
-      }
-    });
+      });
   }
 
-  getUsername(): string {
+  protected getUsername(): string {
     return this.loginService.getUsername();
   }
 
-  isLoggedIn(): boolean {
+  protected isLoggedIn(): boolean {
     return this.loginService.getLoginStatus();
   }
 
-  getThemeStatus(): boolean {
+  protected getThemeStatus(): boolean {
     return this.darkThemeService.getTheme();
   }
 
-  toggleMobileNavbar(): void {
+  protected toggleMobileNavbar(): void {
     this.isActive = this.navbarHeaderService.toggleNavbar();
   }
 
-  toggleTheme(): void {
+  protected toggleTheme(): void {
     this.darkThemeService.toggleDarkTheme();
+  }
+
+  ngOnDestroy(): void {
+    this.destroySubscription.next(true);
+    this.destroySubscription.complete();
   }
 }

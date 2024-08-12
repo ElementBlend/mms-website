@@ -1,31 +1,29 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
 import { isPlatformServer } from '@angular/common';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimelineModpackService {
-  private timelineData: any[] = [];
   private backendDomain = environment.backendDomain;
   private backendPort = environment.backendPort;
+  private timelineData: any[] = [];
 
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
-  getTimelineDataFromServer(): void {
+  getTimelineUrlFromServer(): string {
     let timelineUrl = "";
     if (isPlatformServer(this.platformId)) {
       timelineUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/timelines`;
     } else {
       timelineUrl = "/api/v1/modpacks/timelines";
     }
+    return timelineUrl;
+  }
 
-    this.http.get<any>(timelineUrl).subscribe({
-      next: (data) => {
-        this.timelineData = data.data;
-      }
-    });
+  updateTimelineData(data: any): void {
+    this.timelineData = data;
   }
 
   getTimelineData(): any[] {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, map, of } from 'rxjs';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -14,24 +14,30 @@ export class LoginService {
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
 
-  loginFromServer(): void {
+  updateUsername(username: string): void {
+    this.username = username;
+  }
+
+  getUsername(): string {
     if (this.username === '') {
-      let loginUrl = "";
+      const currentUsername = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem("username") : '';
+      if (currentUsername) {
+        this.username = currentUsername;
+      }
+    }
+    return this.username;
+  }
+
+  loginFromServer(): string {
+    let loginUrl = "";
+    if (this.username === '') {
       if (isPlatformServer(this.platformId)) {
         loginUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/auth/login`;
       } else {
         loginUrl = "/api/v1/auth/login";
       }
-
-      this.http.get<any>(loginUrl).subscribe({
-        next: (data) => {
-          this.username = data.clientCN;
-          if (this.username !== '' && isPlatformBrowser(this.platformId)) {
-            sessionStorage.setItem("username", data.clientCN);
-          }
-        }
-      });
     }
+    return loginUrl;
   }
 
   checkLoginTokenFromServer(): Observable<boolean> {
@@ -63,15 +69,5 @@ export class LoginService {
     } else {
       return false;
     }
-  }
-
-  getUsername(): string {
-    if (this.username === '') {
-      const currentUsername = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem("username") : null;
-      if (currentUsername) {
-        this.username = currentUsername;
-      }
-    }
-    return this.username;
   }
 }
