@@ -75,6 +75,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "headers": {
+              "Content-Security-Policy": "default-src 'self'; script-src 'self' 'nonce-randomNonceGoesHere'; style-src 'self' 'nonce-randomNonceGoesHere';"
+            }
+          },
           "configurations": {
             "production": {
               "buildTarget": "mms-website:build:production"
