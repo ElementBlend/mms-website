@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { DownloadComponent } from './download/download.component';
 import { authGuard } from './auth.guard';
 import { ContributeComponent } from './contribute/contribute.component';
+import { CertificateComponent } from './certificate/certificate.component';
 
 export const routes: Routes = [
   {
@@ -29,9 +30,14 @@ export const routes: Routes = [
     title: 'Contribute'
   },
   {
+    path: 'certificate',
+    component: CertificateComponent,
+    title: 'Certificate'
+  },
+  {
     path: '404',
     component: PageNotFoundComponent,
-    title: '404 Not Found'
+    title: 'Not Found'
   },
   {
     path: '**',
