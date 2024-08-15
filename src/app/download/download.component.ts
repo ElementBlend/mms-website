@@ -31,13 +31,15 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   private subscribeModpackVersion(): void {
-    this.downloadService.getModpackVersionDataFromServer()
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (data: any) => {
-          this.downloadService.updateModpackVersions(data.versions);
-        }
-      });
+    if (this.getModpackVersions().length === 0) {
+      this.downloadService.getModpackVersionDataFromServer()
+        .pipe(takeUntil(this.destroySubscription))
+        .subscribe({
+          next: (data: any) => {
+            this.downloadService.updateModpackVersions(data.versions);
+          }
+        });
+    }
   }
 
   protected getModpackVersions(): number[] {

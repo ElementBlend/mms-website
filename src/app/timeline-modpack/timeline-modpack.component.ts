@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { TimelineModpackService } from '../timeline-modpack.service';
 
@@ -14,7 +13,7 @@ import { TimelineModpackService } from '../timeline-modpack.service';
 export class TimelineModpackComponent implements OnInit, OnDestroy {
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private timelineService: TimelineModpackService, private _elementRef: ElementRef) { }
+  constructor(private timelineService: TimelineModpackService, private _elementRef: ElementRef) { }
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
@@ -22,14 +21,15 @@ export class TimelineModpackComponent implements OnInit, OnDestroy {
   }
 
   private fetchTimelineData(): void {
-    const timelineUrl = this.timelineService.getTimelineUrlFromServer();
-    this.http.get<any>(timelineUrl)
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (data) => {
-          this.timelineService.updateTimelineData(data.data);
-        }
-      });
+    if (this.getTimelineData().length === 0) {
+      this.timelineService.getTimelineFromServer()
+        .pipe(takeUntil(this.destroySubscription))
+        .subscribe({
+          next: (data: any) => {
+            this.timelineService.updateTimelineData(data.data);
+          }
+        });
+    }
   }
 
   protected getTimelineData(): any[] {
