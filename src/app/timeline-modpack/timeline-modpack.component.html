@@ -1,8 +1,8 @@
 <div class="timeline is-centered">
   @for (data of getTimelineData(); track data.title) {
   @for (item of getObjectKeys(data.timeline); track item) {
-  <div class="timeline-item" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
-    <div class="timeline-marker" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
+  <div class="timeline-item" [ngClass]="getDataColor(data.color)">
+    <div class="timeline-marker" [ngClass]="getDataColor(data.color)">
     </div>
     <div class="timeline-content">
       <p class="heading">
@@ -16,15 +16,15 @@
     </div>
   </div>
   }
-  <div class="timeline-item" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
+  @if (getVersionDuration(data.timeline) > 1 && !data.inProgress) {
+  <div class="timeline-item" [ngClass]="getDataColor(data.color)">
     <header>
-      @if (getVersionDuration(data.timeline) > 1 && !data.inProgress) {
       Total Duration in {{ data.title }}: {{ getVersionDuration(data.timeline) }} days
-      }
     </header>
   </div>
+  }
   <header class="timeline-header">
-    <span class="tag is-large" [ngClass]="{ 'is-info': !data.warning, 'is-warning': data.warning }">
+    <span class="tag is-large" [ngClass]="getDataColor(data.color)">
       {{ data.title }}
     </span>
   </header>

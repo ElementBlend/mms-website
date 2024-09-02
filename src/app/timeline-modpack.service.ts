@@ -36,6 +36,13 @@ export class TimelineModpackService {
     return Object.keys(obj);
   }
 
+  getDataColor(color: any): string {
+    if (color === undefined) {
+      return "is-info";
+    }
+    return color;
+  }
+
   calculateVersionDuration(timeline: any): number {
     const dates = Object.keys(timeline);
     if (dates.length > 1) {

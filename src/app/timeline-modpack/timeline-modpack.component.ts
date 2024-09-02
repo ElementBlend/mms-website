@@ -40,6 +40,10 @@ export class TimelineModpackComponent implements OnInit, OnDestroy {
     return this.timelineService.getObjectKeys(obj);
   }
 
+  protected getDataColor(color: any): string {
+    return this.timelineService.getDataColor(color);
+  }
+
   protected getVersionDuration(timeline: any): number {
     return this.timelineService.calculateVersionDuration(timeline);
   }
