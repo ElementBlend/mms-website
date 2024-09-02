@@ -15,7 +15,7 @@ import { DownloadService } from './../download.service';
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
-  protected selectedVersion: number = 18;
+  protected selectedVersion: number = 18.1;
   protected selectedDownloadOption: string = "modpack";
   protected selectedType: string = "full-installer";
   protected selectedOS: string = "windows";
