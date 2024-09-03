@@ -17,6 +17,7 @@ import { CertificateService } from '../certificate.service';
 })
 export class CertificateComponent implements OnInit, OnDestroy {
   protected selectedOS: string = "windows";
+  private isDownloadButtonClicked: boolean = false;
   private hashValue: string = "";
   private isDownloadEnabled: boolean = true;
   private downloadTimeout: any = null;
@@ -32,6 +33,10 @@ export class CertificateComponent implements OnInit, OnDestroy {
     return this.isDownloadEnabled;
   }
 
+  protected getIsDownloadButtonClicked(): boolean {
+    return this.isDownloadButtonClicked;
+  }
+
   protected getHashValue(): string {
     return this.hashValue;
   }
@@ -44,9 +49,10 @@ export class CertificateComponent implements OnInit, OnDestroy {
     if (this.selectedOS !== "windows") {
       throw new Error(`${this.selectedOS} download is not implemented yet`);
     } else {
+      this.isDownloadButtonClicked = true;
       this.downloadCertificate(this.selectedOS);
     }
-    // this.setHashValue(this.selectedOS);
+    this.setHashValue(this.selectedOS);
   }
 
   private downloadCertificate(type: string): void {
@@ -65,7 +71,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
             }
           }
 
-          this.setHashValue(this.selectedOS);
           const url = window.URL.createObjectURL(response.body as Blob);
           const link = document.createElement('a');
           link.href = url;
@@ -101,6 +106,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
   // Temp function for removeing other options since they are not implemented
   protected onSelectionChanged(): void {
+    this.isDownloadButtonClicked = false;
     this.hashValue = "";
     if (this.selectedOS !== "windows") {
       this.isDownloadEnabled = false;

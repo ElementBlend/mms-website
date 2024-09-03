@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
@@ -40,5 +40,18 @@ export class DownloadService {
       downloadUrl = `/api/v1/modpacks/${selectedVersion}/file?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
     }
     return downloadUrl;
+  }
+
+  getModpackHashValueFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<string> {
+    let modpackHashUrl: string = "";
+    const webApiKey = environment.webApiKey;
+    const headers = new HttpHeaders().set('x-web-api-key', webApiKey);
+
+    if (isPlatformServer(this.platformId)) {
+      modpackHashUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/${selectedVersion}/file/hash?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
+    } else {
+      modpackHashUrl = `api/v1/modpacks/${selectedVersion}/file/hash?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
+    }
+    return this.http.get(modpackHashUrl, { headers: headers, responseType: 'text' });
   }
 }

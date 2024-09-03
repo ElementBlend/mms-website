@@ -27,20 +27,20 @@
       "^/api/v1/modpacks/(.*)": "/api/v1/modpacks/$1"
     }
   },
-  "/api/v1/app/cert-installer": {
-    "target": "https://localhost:3000",
-    "secure": false,
-    "logLevel": "debug",
-    "pathRewrite": {
-      "^/api/v1/app/cert-installer/(.*)": "/api/v1/app/cert-installer/$1"
-    }
-  },
   "/api/v1/app/cert-installer/hash": {
     "target": "https://localhost:3000",
     "secure": false,
     "logLevel": "debug",
     "pathRewrite": {
       "^/api/v1/app/cert-installer/hash/(.*)": "/api/v1/app/cert-installer/hash/$1"
+    }
+  },
+  "/api/v1/app/cert-installer": {
+    "target": "https://localhost:3000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/v1/app/cert-installer/(.*)": "/api/v1/app/cert-installer/$1"
     }
   }
 }

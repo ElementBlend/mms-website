@@ -9,7 +9,7 @@
     <label for="downloadVersion" class="label">Select Modpack Version</label>
     <div class="control">
       <div class="select">
-        <select id="downloadVersion" [(ngModel)]="selectedVersion">
+        <select id="downloadVersion" [(ngModel)]="selectedVersion" (change)="onSelectionChanged()">
           @for (version of getModpackVersions(); track version) {
           <option value={{version}}>Version {{version}}</option>
           }
@@ -64,4 +64,13 @@
         [disabled]="!checkisDownloadEnabled()" (click)="onDownloadButtonClicked()">Download</button>
     </div>
   </div>
+
+  @if (getIsDownloadButtonClicked() === true) {
+  <div class="mt-5">
+    <p>The download should start automatically soon.</p>
+    @if (hasHashValue() === true) {
+    <p>SHA256: {{ getHashValue() }}</p>
+    }
+  </div>
+  }
 </section>
