@@ -108,7 +108,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   protected onSelectionChanged(): void {
     this.isDownloadButtonClicked = false;
     this.hashValue = "";
-    if (this.selectedOS !== "windows") {
+    if (this.selectedOS === "linux") {
       this.isDownloadEnabled = false;
     } else {
       this.isDownloadEnabled = true;
