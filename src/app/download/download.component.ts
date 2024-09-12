@@ -15,7 +15,7 @@ import { DownloadService } from './../download.service';
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
-  protected selectedVersion: number = 18.1;
+  protected selectedVersion: number = 18.2;
   protected selectedDownloadOption: string = "modpack";
   protected selectedType: string = "full-installer";
   protected selectedOS: string = "windows";
@@ -109,7 +109,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
   protected onSelectionChanged(): void {
     this.isDownloadButtonClicked = false;
     this.hashValue = "";
-    if (this.selectedDownloadOption !== "modpack" || this.selectedType !== "full-installer" || this.selectedOS !== "windows") {
+    if (this.selectedDownloadOption !== "modpack" || this.selectedOS !== "windows") {
       this.isDownloadEnabled = false;
     } else {
       this.isDownloadEnabled = true;
