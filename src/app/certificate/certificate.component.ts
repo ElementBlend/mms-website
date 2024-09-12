@@ -46,8 +46,8 @@ export class CertificateComponent implements OnInit, OnDestroy {
   }
 
   protected onDownloadButtonClicked(): void {
-    if (this.selectedOS !== "windows") {
-      throw new Error(`${this.selectedOS} download is not implemented yet`);
+    if (this.selectedOS === "linux") {
+      throw new Error("Linux download is not implemented yet");
     } else {
       this.isDownloadButtonClicked = true;
       this.downloadCertificate(this.selectedOS);
