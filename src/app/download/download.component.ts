@@ -22,7 +22,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
   private isDownloadButtonClicked: boolean = false;
   private hashValue: string = "";
   private isDownloadEnabled: boolean = true;
-  private downloadTimeout: any = null;
+  private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _elementRef: ElementRef, private downloadService: DownloadService) { }

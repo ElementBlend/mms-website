@@ -20,7 +20,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   private isDownloadButtonClicked: boolean = false;
   private hashValue: string = "";
   private isDownloadEnabled: boolean = true;
-  private downloadTimeout: any = null;
+  private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _elementRef: ElementRef, private certificateService: CertificateService) { }
@@ -79,13 +79,12 @@ export class CertificateComponent implements OnInit, OnDestroy {
           link.download = fileName;
           link.click();
           window.URL.revokeObjectURL(url);
-
-          this.isDownloadEnabled = false;
-          this.downloadTimeout = setTimeout(() => {
-            this.isDownloadEnabled = true;
-          }, 5000);
         }
       });
+    this.isDownloadEnabled = false;
+    this.downloadTimeout = setTimeout(() => {
+      this.isDownloadEnabled = true;
+    }, 5000);
   }
 
   private setHashValue(selectedOS: string): void {
