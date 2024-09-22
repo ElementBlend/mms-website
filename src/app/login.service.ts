@@ -3,14 +3,16 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, map, of } from 'rxjs';
 import { environment } from '../environments/environment';
+import { ILoginResponse } from './login-response';
+import { ILoginTokenResponse } from './login-token-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   private username: string = '';
-  private backendDomain = environment.backendDomain;
-  private backendPort = environment.backendPort;
+  private backendDomain: string = environment.backendDomain;
+  private backendPort: number = environment.backendPort;
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
 
@@ -28,8 +30,8 @@ export class LoginService {
     return this.username;
   }
 
-  loginFromServer(): string {
-    let loginUrl = "";
+  loginFromServer(): Observable<ILoginResponse> {
+    let loginUrl: string = "";
     if (this.username === '') {
       if (isPlatformServer(this.platformId)) {
         loginUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/auth/login`;
@@ -37,27 +39,28 @@ export class LoginService {
         loginUrl = "/api/v1/auth/login";
       }
     }
-    return loginUrl;
+    return this.http.get<ILoginResponse>(loginUrl);
   }
 
   checkLoginTokenFromServer(): Observable<boolean> {
     if (this.username !== '' && this.username !== 'Guest') {
-      let authUrl = "";
+      let authUrl: string = "";
       if (isPlatformServer(this.platformId)) {
         authUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/auth/token`;
       } else {
         authUrl = "/api/v1/auth/token";
       }
 
-      return this.http.get<any>(authUrl, {}).pipe(
-        map(() => {
-          return true;
-        }),
-        catchError((error) => {
-          console.error("There are some error occurs: " + error.message);
-          return of(false);
-        })
-      );
+      return this.http.get<ILoginTokenResponse>(authUrl, {})
+        .pipe(
+          map(() => {
+            return true;
+          }),
+          catchError((error) => {
+            console.error("There are some error occurs: " + error.message);
+            return of(false);
+          })
+        );
     } else {
       return of(false);
     }

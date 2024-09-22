@@ -1,53 +1,58 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
+import { ITimeline } from './timeline';
+import { ITimelineResponse } from './timeline-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimelineModpackService {
-  private backendDomain = environment.backendDomain;
-  private backendPort = environment.backendPort;
-  private timelineData: any[] = [];
+  private backendDomain: string = environment.backendDomain;
+  private backendPort: number = environment.backendPort;
+  private timelineData: ITimeline[] = [];
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
 
-  updateTimelineData(data: any): void {
+  updateTimelineData(data: ITimeline[]): void {
     this.timelineData = data;
   }
 
-  getTimelineData(): any[] {
+  getTimelineData(): ITimeline[] {
     return this.timelineData;
   }
 
-  getTimelineFromServer(): Observable<Object> {
-    let timelineUrl = "";
+  getTimelineFromServer(): Observable<ITimelineResponse> {
+    let timelineUrl: string = "";
     if (isPlatformServer(this.platformId)) {
       timelineUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/timelines`;
     } else {
       timelineUrl = "/api/v1/modpacks/timelines";
     }
-    return this.http.get(timelineUrl);
+    return this.http.get<ITimelineResponse>(timelineUrl);
   }
 
-  getObjectKeys(obj: any): string[] {
-    return Object.keys(obj);
+  getObjectKeys(obj: ITimeline): string[] {
+    if (Object.prototype.hasOwnProperty.call(obj, "timeline")) {
+      return Object.keys(obj.timeline);
+    } else {
+      return [];
+    }
   }
 
-  getDataColor(color: any): string {
+  getDataColor(color: string | undefined): string {
     if (color === undefined) {
       return "is-info";
     }
     return color;
   }
 
-  calculateVersionDuration(timeline: any): number {
-    const dates = Object.keys(timeline);
-    if (dates.length > 1) {
-      const startDate = new Date(this.parseDate(dates[dates.length - 1]));
-      const endDate = new Date(this.parseDate(dates[0]));
+  calculateVersionDuration(timeline: string[]): number {
+    if (timeline.length > 1) {
+      const startDate = new Date(this.parseDate(timeline[timeline.length - 1]));
+      const endDate = new Date(this.parseDate(timeline[0]));
       const durationInMilliseconds = endDate.getTime() - startDate.getTime();
       const durationInDays = Math.floor(durationInMilliseconds / (1000 * 60 * 60 * 24));
       return durationInDays;

@@ -1,8 +1,9 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
+import { IVersionResponse } from './version-response';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +23,14 @@ export class DownloadService {
     return this.modpackVersions;
   }
 
-  getModpackVersionDataFromServer(): Observable<Object> {
+  getModpackVersionDataFromServer(): Observable<IVersionResponse> {
     let modpackUrl: string = "";
     if (isPlatformServer(this.platformId)) {
       modpackUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/versions`;
     } else {
       modpackUrl = "/api/v1/modpacks/versions";
     }
-    return this.http.get(modpackUrl);
+    return this.http.get<IVersionResponse>(modpackUrl);
   }
 
   getDownloadModpackUrlFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): string {

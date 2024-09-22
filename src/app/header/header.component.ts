@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { NavbarHeaderService } from '../navbar-header.service';
 import { DarkThemeService } from '../dark-theme.service';
 import { LoginService } from '../login.service';
+import { INavbar } from '../navbar';
+import { ILoginResponse } from '../login-response';
 
 @Component({
   selector: 'app-header',
@@ -16,10 +17,10 @@ import { LoginService } from '../login.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   protected isActive: boolean = false;
-  protected navbarItemsList: any[] = [];
+  protected navbarItemsList: INavbar[] = [];
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private loginService: LoginService, private elementRef: ElementRef, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private loginService: LoginService, private elementRef: ElementRef, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.elementRef.nativeElement.removeAttribute("ng-version");
@@ -29,11 +30,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private onlogin(): void {
-    const loginUrl = this.loginService.loginFromServer();
-    this.http.get<any>(loginUrl)
+    this.loginService.loginFromServer()
       .pipe(takeUntil(this.destroySubscription))
       .subscribe({
-        next: (data) => {
+        next: (data: ILoginResponse) => {
           this.loginService.updateUsername(data.clientCN);
           if (this.loginService.getUsername() !== '' && isPlatformBrowser(this.platformId)) {
             sessionStorage.setItem("username", data.clientCN);

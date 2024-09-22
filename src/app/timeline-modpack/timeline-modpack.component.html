@@ -1,6 +1,6 @@
 <div class="timeline is-centered">
   @for (data of getTimelineData(); track data.title) {
-  @for (item of getObjectKeys(data.timeline); track item) {
+  @for (item of getObjectKeys(data); track item) {
   <div class="timeline-item" [ngClass]="getDataColor(data.color)">
     <div class="timeline-marker" [ngClass]="getDataColor(data.color)">
     </div>
@@ -16,10 +16,10 @@
     </div>
   </div>
   }
-  @if (getVersionDuration(data.timeline) > 1 && !data.inProgress) {
+  @if (getVersionDuration(getObjectKeys(data)) > 1 && !data.inProgress) {
   <div class="timeline-item" [ngClass]="getDataColor(data.color)">
     <header>
-      Total Duration in {{ data.title }}: {{ getVersionDuration(data.timeline) }} days
+      Total Duration in {{ data.title }}: {{ getVersionDuration(getObjectKeys(data)) }} days
     </header>
   </div>
   }

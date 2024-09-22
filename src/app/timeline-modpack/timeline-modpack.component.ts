@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { TimelineModpackService } from '../timeline-modpack.service';
+import { ITimeline } from '../timeline';
+import { ITimelineResponse } from '../timeline-response';
 
 @Component({
   selector: 'app-timeline-modpack',
@@ -25,26 +27,26 @@ export class TimelineModpackComponent implements OnInit, OnDestroy {
       this.timelineService.getTimelineFromServer()
         .pipe(takeUntil(this.destroySubscription))
         .subscribe({
-          next: (data: any) => {
+          next: (data: ITimelineResponse) => {
             this.timelineService.updateTimelineData(data.data);
           }
         });
     }
   }
 
-  protected getTimelineData(): any[] {
+  protected getTimelineData(): ITimeline[] {
     return this.timelineService.getTimelineData();
   }
 
-  protected getObjectKeys(obj: any): string[] {
+  protected getObjectKeys(obj: ITimeline): string[] {
     return this.timelineService.getObjectKeys(obj);
   }
 
-  protected getDataColor(color: any): string {
+  protected getDataColor(color: string | undefined): string {
     return this.timelineService.getDataColor(color);
   }
 
-  protected getVersionDuration(timeline: any): number {
+  protected getVersionDuration(timeline: string[]): number {
     return this.timelineService.calculateVersionDuration(timeline);
   }
 

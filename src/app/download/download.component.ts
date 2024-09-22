@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DownloadService } from './../download.service';
+import { IVersionResponse } from '../version-response';
 
 @Component({
   selector: 'app-download',
@@ -37,7 +38,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
       this.downloadService.getModpackVersionDataFromServer()
         .pipe(takeUntil(this.destroySubscription))
         .subscribe({
-          next: (data: any) => {
+          next: (data: IVersionResponse) => {
             this.downloadService.updateModpackVersions(data.versions);
           }
         });
