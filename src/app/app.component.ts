@@ -29,11 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroySubscription))
         .subscribe(isDark => {
           if (isDark) {
-            this.renderer.addClass(document.documentElement, 'dark-theme');
+            this.renderer.setAttribute(document.documentElement, "data-theme", "dark");
           } else {
-            if (document.documentElement.classList.contains('dark-theme')) {
-              this.renderer.removeClass(document.documentElement, 'dark-theme');
-            }
+            this.renderer.setAttribute(document.documentElement, "data-theme", "light");
           }
         });
     }

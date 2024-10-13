@@ -5,13 +5,10 @@
     <div class="timeline-marker" [ngClass]="getDataColor(data.color)">
     </div>
     <div class="timeline-content">
-      <p class="heading">
-        {{ item }}
-      </p>
       <p>
-        <b>
-          {{ data.timeline[item] }}
-        </b>
+        {{ item }}
+        <br>
+        {{ data.timeline[item] }}
       </p>
     </div>
   </div>
