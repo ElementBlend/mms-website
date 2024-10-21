@@ -1,12 +1,10 @@
-import { Component, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { NavbarHeaderService } from '../navbar-header.service';
 import { DarkThemeService } from '../dark-theme.service';
 import { LoginService } from '../login.service';
 import { INavbar } from '../navbar';
-import { ILoginResponse } from '../login-response';
 
 @Component({
   selector: 'app-header',
@@ -20,26 +18,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected navbarItemsList: INavbar[] = [];
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private loginService: LoginService, private elementRef: ElementRef, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private loginService: LoginService, private elementRef: ElementRef, private router: Router) { }
 
   ngOnInit(): void {
     this.elementRef.nativeElement.removeAttribute("ng-version");
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
-    this.onlogin();
+    this.autoLogin();
     this.closeMobileNavbar();
   }
 
-  private onlogin(): void {
-    this.loginService.loginFromServer()
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (data: ILoginResponse) => {
-          this.loginService.updateUsername(data.clientCN);
-          if (this.loginService.getUsername() !== '' && isPlatformBrowser(this.platformId)) {
-            sessionStorage.setItem("username", data.clientCN);
-          }
-        }
-      });
+  private autoLogin(): void {
+    if (this.loginService.getIdentityStatus() === false) {
+      this.loginService.loginFromServer().pipe(takeUntil(this.destroySubscription)).subscribe();
+    }
   }
 
   private closeMobileNavbar(): void {
@@ -58,8 +49,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.loginService.getUsername();
   }
 
-  protected isLoggedIn(): boolean {
-    return this.loginService.getLoginStatus();
+  protected hasAuth(): boolean {
+    return this.loginService.getAuthStatus();
   }
 
   protected getThemeStatus(): boolean {

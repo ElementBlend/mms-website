@@ -13,12 +13,13 @@
 
   <div id="navbarBasic" class="navbar-menu" [class.is-active]="isActive">
     <div class="navbar-start">
-      @for (item of navbarItemsList; track item.name) { @if (!item.requireAuth
-      || isLoggedIn()) {
+      @for (item of navbarItemsList; track item.name) {
+      @if (!item.requireAuth || hasAuth()) {
       <a class="navbar-item" [routerLink]="item.link">
         <p>{{ item.name }}</p>
       </a>
-      } }
+      }
+      }
     </div>
     <div class="navbar-end">
       <div class="navbar-item">

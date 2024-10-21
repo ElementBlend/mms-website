@@ -16,6 +16,6 @@ export class LoginComponent implements OnInit {
   }
 
   protected getLoginStatus(): boolean {
-    return this.loginService.getLoginStatus();
+    return this.loginService.getAuthStatus();
   }
 }
