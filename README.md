@@ -1,19 +1,14 @@
 # MmsWebsite
 
-This is a website for Discord Minecraft Modding Survival Server use
-
-This project is a **rewrite of the original website**, which was written in PHP. The original website can be found [here](https://github.com/SamLam140330/MmsWebsite). The original website is still being used but will be replaced by this website once it is finished.
-
-Before the website is finished, all the coding **may not be 100% correct**. This is because I am still learning Angular and TypeScript. I will try to fix any issues as soon as possible.
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.1.
+This is a website for Discord Minecraft Modding Survival Server use.  
+This is a rewritten version of the original PHP website using a modern Angular web application framework and more bug fixes.
 
 ## Setup
 
 1. Install [Node.js® and npm](https://nodejs.org/en/download/) if they are not already on your machine.
-2. Install the Angular CLI globally with `npm install -g @angular/cli`
-3. Clone this repository
-4. Run `npm install` to install the project dependencies
+2. Install the Angular CLI globally with `npm install -g @angular/cli`.
+3. Clone this repository.
+4. Run `npm install` to install the project dependencies.
 
 ## Development server
 
