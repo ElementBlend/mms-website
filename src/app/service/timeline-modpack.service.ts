@@ -2,9 +2,9 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
-import { ITimeline } from './timeline';
-import { ITimelineResponse } from './timeline-response';
+import { environment } from '../../environments/environment';
+import { ITimeline } from '../interface/timeline';
+import { ITimelineResponse } from '../interface/timeline-response';
 
 @Injectable({
   providedIn: 'root'

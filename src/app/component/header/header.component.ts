@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { NavbarHeaderService } from '../navbar-header.service';
-import { DarkThemeService } from '../dark-theme.service';
-import { LoginService } from '../login.service';
-import { INavbar } from '../navbar';
+import { NavbarHeaderService } from '../../service/navbar-header.service';
+import { DarkThemeService } from '../../service/dark-theme.service';
+import { LoginService } from '../../service/login.service';
+import { INavbar } from '../../interface/navbar';
 
 @Component({
   selector: 'app-header',

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Observable, catchError, map, of, take } from 'rxjs';
-import { environment } from '../environments/environment';
-import { ILoginResponse } from './login-response';
+import { environment } from '../../environments/environment';
+import { ILoginResponse } from '../interface/login-response';
 // import { ILoginTokenResponse } from './login-token-response';
 
 @Injectable({

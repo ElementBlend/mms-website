@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { DownloadService } from './download.service';
 
 describe('DownloadService', () => {

@@ -3,7 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { CertificateService } from '../certificate.service';
+import { CertificateService } from '../../service/certificate.service';
 
 @Component({
   selector: 'app-certificate',

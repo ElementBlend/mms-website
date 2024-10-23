@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { DownloadService } from './../download.service';
-import { IVersionResponse } from '../version-response';
+import { DownloadService } from '../../service/download.service';
+import { IVersionResponse } from '../../interface/version-response';
 
 @Component({
   selector: 'app-download',

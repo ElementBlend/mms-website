@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { LoginComponent } from './login/login.component';
-import { DownloadComponent } from './download/download.component';
-import { authGuard } from './auth.guard';
-import { ContributeComponent } from './contribute/contribute.component';
-import { CertificateComponent } from './certificate/certificate.component';
+import { HomeComponent } from './component/home/home.component';
+import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
+import { LoginComponent } from './component/login/login.component';
+import { DownloadComponent } from './component/download/download.component';
+import { authGuard } from './guard/auth.guard';
+import { ContributeComponent } from './component/contribute/contribute.component';
+import { CertificateComponent } from './component/certificate/certificate.component';
 
 export const routes: Routes = [
   {

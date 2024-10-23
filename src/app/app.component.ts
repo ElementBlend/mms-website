@@ -2,9 +2,9 @@ import { Component, ElementRef, Inject, OnInit, OnDestroy, PLATFORM_ID, Renderer
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { HeaderComponent } from './header/header.component';
-import { DarkThemeService } from './dark-theme.service';
-import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './component/header/header.component';
+import { DarkThemeService } from './service/dark-theme.service';
+import { FooterComponent } from './component/footer/footer.component';
 
 @Component({
   selector: 'app-root',

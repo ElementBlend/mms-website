@@ -6,8 +6,8 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import fs from 'fs';
 import https from 'https';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import { environment } from './src/environments/environment';
+// import { createProxyMiddleware } from 'http-proxy-middleware';
+// import { environment } from './src/environments/environment';
 
 export function app(): express.Express {
   const server = express();
@@ -15,15 +15,15 @@ export function app(): express.Express {
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
   const commonEngine = new CommonEngine();
-  const backendDomain = environment.backendDomain;
-  const backendPort = environment.backendPort;
+  // const backendDomain = environment.backendDomain;
+  // const backendPort = environment.backendPort;
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  server.use('/api/', createProxyMiddleware({
-    target: `https://${backendDomain}:${backendPort}`
-  }));
+  // server.use('/api/', createProxyMiddleware({
+  //   target: `https://${backendDomain}:${backendPort}`
+  // }));
 
   // Serve static files from /browser
   server.get('*.*', express.static(browserDistFolder, {
@@ -39,7 +39,7 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }]
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));

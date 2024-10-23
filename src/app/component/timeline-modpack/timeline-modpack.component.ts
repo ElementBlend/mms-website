@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { TimelineModpackService } from '../timeline-modpack.service';
-import { ITimeline } from '../timeline';
-import { ITimelineResponse } from '../timeline-response';
+import { TimelineModpackService } from '../../service/timeline-modpack.service';
+import { ITimeline } from '../../interface/timeline';
+import { ITimelineResponse } from '../../interface/timeline-response';
 
 @Component({
   selector: 'app-timeline-modpack',
