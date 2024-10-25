@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, _state:
         if (result) {
           return true;
         } else {
-          return router.createUrlTree(['/404']);
+          return router.createUrlTree(['/403']);
         }
       })
     );

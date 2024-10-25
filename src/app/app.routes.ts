@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './component/home/home.component';
+import { authGuard } from './guard/auth.guard';
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
+import { ForbiddenComponent } from './component/forbidden/forbidden.component';
+import { HomeComponent } from './component/home/home.component';
 import { LoginComponent } from './component/login/login.component';
 import { DownloadComponent } from './component/download/download.component';
-import { authGuard } from './guard/auth.guard';
 import { ContributeComponent } from './component/contribute/contribute.component';
 import { CertificateComponent } from './component/certificate/certificate.component';
 
@@ -37,7 +38,12 @@ export const routes: Routes = [
   {
     path: '404',
     component: PageNotFoundComponent,
-    title: 'Not Found'
+    title: 'Page Not Found'
+  },
+  {
+    path: '403',
+    component: ForbiddenComponent,
+    title: 'Forbidden'
   },
   {
     path: '**',
