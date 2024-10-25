@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
-import { IVersionResponse } from '../../interface/version-response';
+import { IModpackInfoResponse } from '../../interface/modpack-info-response';
 
 @Component({
   selector: 'app-download',
@@ -16,7 +16,7 @@ import { IVersionResponse } from '../../interface/version-response';
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
-  protected selectedVersion: number = 18.2;
+  protected selectedVersion: number = 0;
   protected selectedDownloadOption: string = "modpack";
   protected selectedType: string = "full-installer";
   protected selectedOS: string = "windows";
@@ -30,16 +30,17 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
-    this.subscribeModpackVersion();
+    this.subscribeModpackInfo();
   }
 
-  private subscribeModpackVersion(): void {
-    if (this.getModpackVersions().length === 0) {
-      this.downloadService.getModpackVersionDataFromServer()
+  private subscribeModpackInfo(): void {
+    if (this.downloadService.hasModpackInfo() === false) {
+      this.downloadService.getModpackInfoFromServer()
         .pipe(takeUntil(this.destroySubscription))
         .subscribe({
-          next: (data: IVersionResponse) => {
-            this.downloadService.updateModpackVersions(data.versions);
+          next: (response: IModpackInfoResponse) => {
+            this.downloadService.updateModpackInfo(response);
+            // this.selectedVersion = this.getModpackVersions().length - 1;
           }
         });
     }
@@ -47,6 +48,18 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   protected getModpackVersions(): number[] {
     return this.downloadService.getModpackVersions();
+  }
+
+  protected getModpackName(): string {
+    return this.downloadService.getModpackName(this.selectedVersion);
+  }
+
+  protected getModpackImage(): string {
+    return this.downloadService.getModpackImage(this.selectedVersion);
+  }
+
+  protected getModpackImageAlt(): string {
+    return this.downloadService.getModpackImageAlt(this.selectedVersion);
   }
 
   protected getIsDownloadButtonClicked(): boolean {
@@ -77,9 +90,9 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   private downloadModpack(version: number, option: string, type: string, os: string): void {
     const url = this.downloadService.getDownloadModpackUrlFromServer(version, option, type, os);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.target = '_blank';
+    link.target = "_blank";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

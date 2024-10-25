@@ -5,72 +5,87 @@
 </section>
 
 <section class="section">
-  <div class="field">
-    <label for="downloadVersion" class="label">Select Modpack Version</label>
-    <div class="control">
-      <div class="select">
-        <select id="downloadVersion" [(ngModel)]="selectedVersion" (change)="onSelectionChanged()">
-          @for (version of getModpackVersions(); track version) {
-          <option value={{version}}>Version {{version}}</option>
-          }
-        </select>
+  <div class="columns is-multiline is-6">
+    <div class="column is-one-third">
+      <div class="card">
+        <div class="card-content">
+          <p class="subtitle is-3">{{ getModpackName() }}</p>
+          <figure class="image">
+            <img [src]="getModpackImage()" [alt]="getModpackImageAlt()">
+          </figure>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="field">
-    <label for="downloadOption" class="label">Select Download Option</label>
-    <div class="control">
-      <div class="select">
-        <select id="downloadOption" [(ngModel)]="selectedDownloadOption" (change)="onSelectionChanged()">
-          <option value="modpack">Modpack</option>
-          <option value="world">World</option>
-        </select>
+    <div class="column">
+      <div class="field">
+        <label for="downloadVersion" class="label">Select Modpack Version</label>
+        <div class="control">
+          <div class="select">
+            <select id="downloadVersion" [(ngModel)]="selectedVersion" (change)="onSelectionChanged()">
+              @for (version of getModpackVersions(); track version; let idx = $index) {
+              <option [value]=idx>Version {{version}}</option>
+              }
+            </select>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  @if (selectedDownloadOption === 'modpack') {
-  <div class="field">
-    <label for="downloadType" class="label">Select Modpack Type</label>
-    <div class="control">
-      <div class="select">
-        <select id="downloadType" [(ngModel)]="selectedType" (change)="onSelectionChanged()">
-          <option value="full-installer">Full Installer</option>
-          <option value="update-patches">Update Patches</option>
-        </select>
+      <div class="field">
+        <label for="downloadOption" class="label">Select Download Option</label>
+        <div class="control">
+          <div class="select">
+            <select id="downloadOption" [(ngModel)]="selectedDownloadOption" (change)="onSelectionChanged()">
+              <option value="modpack">Modpack</option>
+              <option value="world">World</option>
+            </select>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="field">
-    <label for="downloadOs" class="label">Select OS</label>
-    <div class="control">
-      <div class="select">
-        <select id="downloadOs" [(ngModel)]="selectedOS" (change)="onSelectionChanged()">
-          <option value="windows">Windows</option>
-          <option value="mac">Mac</option>
-          <option value="linux">Linux</option>
-        </select>
+      @if (selectedDownloadOption === "modpack") {
+      <div class="field">
+        <label for="downloadType" class="label">Select Modpack Type</label>
+        <div class="control">
+          <div class="select">
+            <select id="downloadType" [(ngModel)]="selectedType" (change)="onSelectionChanged()">
+              <option value="full-installer">Full Installer</option>
+              <option value="update-patches">Update Patches</option>
+            </select>
+          </div>
+        </div>
       </div>
+
+      <div class="field">
+        <label for="downloadOs" class="label">Select OS</label>
+        <div class="control">
+          <div class="select">
+            <select id="downloadOs" [(ngModel)]="selectedOS" (change)="onSelectionChanged()">
+              <option value="windows">Windows</option>
+              <option value="mac">Mac</option>
+              <option value="linux">Linux</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      }
+
+      <div class="field is-grouped mt-5">
+        <div class="control">
+          <button
+            [ngClass]="{'button': true, 'is-primary': checkisDownloadEnabled(), 'is-danger': !checkisDownloadEnabled()}"
+            [disabled]="!checkisDownloadEnabled()" (click)="onDownloadButtonClicked()">Download</button>
+        </div>
+      </div>
+
+      @if (getIsDownloadButtonClicked() === true) {
+      <div class="mt-5">
+        <p>The download should start automatically soon.</p>
+        @if (hasHashValue() === true) {
+        <p>SHA256: {{ getHashValue() }}</p>
+        }
+      </div>
+      }
     </div>
   </div>
-  }
-
-  <div class="field is-grouped mt-5">
-    <div class="control">
-      <button
-        [ngClass]="{'button': true, 'is-primary': checkisDownloadEnabled(), 'is-danger': !checkisDownloadEnabled()}"
-        [disabled]="!checkisDownloadEnabled()" (click)="onDownloadButtonClicked()">Download</button>
-    </div>
-  </div>
-
-  @if (getIsDownloadButtonClicked() === true) {
-  <div class="mt-5">
-    <p>The download should start automatically soon.</p>
-    @if (hasHashValue() === true) {
-    <p>SHA256: {{ getHashValue() }}</p>
-    }
-  </div>
-  }
 </section>
