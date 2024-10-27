@@ -1,6 +1,7 @@
 /
 /404
-/download
+/403
+/login
 /certificate
 /contribute
-/login
+/download
