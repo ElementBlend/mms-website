@@ -5,3 +5,4 @@
 /certificate
 /contribute
 /download
+/installation

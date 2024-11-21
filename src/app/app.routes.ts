@@ -7,6 +7,7 @@ import { LoginComponent } from './component/login/login.component';
 import { DownloadComponent } from './component/download/download.component';
 import { ContributeComponent } from './component/contribute/contribute.component';
 import { CertificateComponent } from './component/certificate/certificate.component';
+import { InstallationComponent } from './component/installation/installation.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,12 @@ export const routes: Routes = [
     component: DownloadComponent,
     canActivate: [authGuard],
     title: 'Download'
+  },
+  {
+    path: 'installation',
+    component: InstallationComponent,
+    canActivate: [authGuard],
+    title: 'Installation Guide'
   },
   {
     path: 'contribute',
