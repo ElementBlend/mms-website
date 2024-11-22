@@ -17,7 +17,7 @@ import { InstallationGuideService } from '../../service/installation-guide.servi
 export class InstallationComponent implements OnInit {
   private selectedOS: string = "Windows";
   private selectedMethod: string = "Full";
-  private expanded: boolean = true;
+  private isHidden: boolean = true;
 
   constructor(private _elementRef: ElementRef, private stepsService: InstallationGuideService) { }
 
@@ -71,7 +71,7 @@ export class InstallationComponent implements OnInit {
   }
 
   protected getHiddenStatus(): boolean {
-    return this.expanded;
+    return this.isHidden;
   }
 
   protected getImageUrl(stepNum: number): string {
