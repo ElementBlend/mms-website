@@ -51,7 +51,7 @@ export class TimelineModpackService {
 
   calculateVersionDuration(timeline: string[]): number {
     if (timeline.length > 1) {
-      const startDate = new Date(this.parseDate(timeline[timeline.length - 1]));
+      const startDate = new Date(this.parseDate(timeline[timeline.length - 2]));
       const endDate = new Date(this.parseDate(timeline[0]));
       const durationInMilliseconds = endDate.getTime() - startDate.getTime();
       const durationInDays = Math.floor(durationInMilliseconds / (1000 * 60 * 60 * 24));
