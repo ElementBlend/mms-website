@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { MetaControllerService } from '../../service/meta-controller.service';
 
 @Component({
   selector: 'app-contribute',
@@ -13,12 +14,25 @@ export class ContributeComponent implements OnInit {
   private contributerAvatars: String[] = [];
   private contributerRoles: String[] = [];
 
-  constructor(private _elementRef: ElementRef) { }
+  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService) { }
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.setupSEOTags();
+    this.dataInitilization();
     // this.getDataFromGithubAPI();
+  }
 
+  private setupSEOTags(): void {
+    const link: string = "https://mod.elementblend.com/contribute/";
+
+    this.metaControllerService.setMetaTag("description", "This is the contributors page for the ElementBlend MMS website. You can check the contributors here.");
+    this.metaControllerService.setMetaTag("og:title", "Contributors");
+    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.updateCanonicalUrl(link);
+  }
+
+  private dataInitilization(): void {
     this.contributerNames = [
       "SamLam140330",
       "LHemon412",

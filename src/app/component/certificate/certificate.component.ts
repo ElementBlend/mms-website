@@ -4,6 +4,7 @@ import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { CertificateService } from '../../service/certificate.service';
+import { MetaControllerService } from './../../service/meta-controller.service';
 
 @Component({
   selector: 'app-certificate',
@@ -23,10 +24,20 @@ export class CertificateComponent implements OnInit, OnDestroy {
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private _elementRef: ElementRef, private certificateService: CertificateService) { }
+  constructor(private _elementRef: ElementRef, private certificateService: CertificateService, private metaControllerService: MetaControllerService) { }
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.setupSEOTags();
+  }
+
+  private setupSEOTags(): void {
+    const link: string = "https://mod.elementblend.com/certificate/";
+
+    this.metaControllerService.setMetaTag("description", "This is the certificate related page for users to access the ElementBlend MMS modpack. You can download the certificate standalone application here.");
+    this.metaControllerService.setMetaTag("og:title", "Certificate");
+    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.updateCanonicalUrl(link);
   }
 
   protected getisDownloadEnabled(): boolean {

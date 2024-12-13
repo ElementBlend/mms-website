@@ -5,52 +5,58 @@ import { ForbiddenComponent } from './component/forbidden/forbidden.component';
 import { HomeComponent } from './component/home/home.component';
 import { LoginComponent } from './component/login/login.component';
 import { DownloadComponent } from './component/download/download.component';
+import { InstallationComponent } from './component/installation/installation.component';
 import { ContributeComponent } from './component/contribute/contribute.component';
 import { CertificateComponent } from './component/certificate/certificate.component';
-import { InstallationComponent } from './component/installation/installation.component';
+import { ApplicationComponent } from './component/application/application.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    title: 'Home'
+    title: 'Home - MMS - Elementbland'
   },
   {
     path: 'login',
     component: LoginComponent,
-    title: 'Login'
+    title: 'Login Status - MMS - Elementbland'
   },
   {
     path: 'download',
     component: DownloadComponent,
     canActivate: [authGuard],
-    title: 'Download'
+    title: 'Modpack Download - MMS - Elementbland'
   },
   {
     path: 'installation',
     component: InstallationComponent,
     canActivate: [authGuard],
-    title: 'Installation Guide'
+    title: 'Installation Guide - MMS - Elementbland'
   },
   {
     path: 'contribute',
     component: ContributeComponent,
-    title: 'Contribute'
+    title: 'Contributors - MMS - Elementbland'
   },
   {
     path: 'certificate',
     component: CertificateComponent,
-    title: 'Certificate'
+    title: 'Certificate - MMS - Elementbland'
+  },
+  {
+    path: 'application',
+    component: ApplicationComponent,
+    title: 'Application Form - MMS - Elementbland'
   },
   {
     path: '404',
     component: PageNotFoundComponent,
-    title: 'Page Not Found'
+    title: 'Page Not Found - MMS - Elementbland'
   },
   {
     path: '403',
     component: ForbiddenComponent,
-    title: 'Forbidden'
+    title: 'Forbidden - MMS - Elementbland'
   },
   {
     path: '**',

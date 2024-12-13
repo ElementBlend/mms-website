@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IInstallationStep } from '../../interface/installation-step';
 import { InstallationGuideService } from '../../service/installation-guide.service';
+import { MetaControllerService } from '../../service/meta-controller.service';
 
 @Component({
   selector: 'app-installation',
@@ -19,10 +20,20 @@ export class InstallationComponent implements OnInit {
   private selectedMethod: string = "Full";
   private isHidden: boolean = true;
 
-  constructor(private _elementRef: ElementRef, private stepsService: InstallationGuideService) { }
+  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService, private stepsService: InstallationGuideService) { }
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.setupSEOTags();
+  }
+
+  private setupSEOTags(): void {
+    const link: string = "https://mod.elementblend.com/installation/";
+
+    this.metaControllerService.setMetaTag("description", "This is the installation guide for the ElementBlend MMS modpack. You can find the installation steps here.");
+    this.metaControllerService.setMetaTag("og:title", "Installation Guide");
+    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.updateCanonicalUrl(link);
   }
 
   protected getSelectedOS(): string {
