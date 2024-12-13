@@ -36,7 +36,7 @@
     "@samlam140330/bulma-switch": "^1.0.1",
     "@samlam140330/bulma-timeline": "^1.0.2",
     "bulma": "^1.0.2",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "http-proxy-middleware": "^3.0.3",
     "ngx-cookie-service": "^18.0.0",
     "rxjs": "~7.8.1",
