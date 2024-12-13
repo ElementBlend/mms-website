@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
 import { IModpackInfoResponse } from '../../interface/modpack-info-response';
+import { MetaControllerService } from '../../service/meta-controller.service';
 
 @Component({
   selector: 'app-download',
@@ -26,11 +27,21 @@ export class DownloadComponent implements OnInit, OnDestroy {
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private _elementRef: ElementRef, private downloadService: DownloadService) { }
+  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService, private downloadService: DownloadService) { }
 
   ngOnInit(): void {
     this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.setupSEOTags();
     this.subscribeModpackInfo();
+  }
+
+  private setupSEOTags(): void {
+    const link: string = "https://mod.elementblend.com/download/";
+
+    this.metaControllerService.setMetaTag("description", "This is the download page for the ElementBlend MMS modpack. You can download the modpack here.");
+    this.metaControllerService.setMetaTag("og:title", "Download");
+    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.updateCanonicalUrl(link);
   }
 
   private subscribeModpackInfo(): void {
