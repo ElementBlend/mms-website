@@ -6,3 +6,4 @@
 /contribute
 /download
 /installation
+/application

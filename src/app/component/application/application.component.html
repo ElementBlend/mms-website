@@ -5,9 +5,62 @@
 </section>
 
 <section class="section">
-  @if (isFormEnabled()) {
-  <p>application works!</p>
-  } @else {
-  <p>application is disabled!</p>
-  }
+  <div class="container">
+    @if (isFormEnabled()) {
+    <h2 class="title has-text-centered">Please fill out the form below for applying to join our server:</h2>
+    <p class="has-text-centered">Placeholder</p>
+    <!-- TODO: Implement the form functionality -->
+    <!-- <form>
+      <div class="field">
+        <label class="label">Discord Username</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Enter your Discord username">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Minecraft Username</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Enter your Minecraft username">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          <input class="input" type="email" placeholder="Enter your email">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Computer Specification</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="ie: 5800x3d, 32GB RAM, RTX 3080">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Why do you want to join our server?</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Tell us why you want to join our server"></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox">
+            I agree to the <a href="#">terms and conditions</a>
+          </label>
+        </div>
+      </div>
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <button class="button is-primary">Submit</button>
+        </div>
+        <div class="control">
+          <button class="button is-danger">Cancel</button>
+        </div>
+      </div>
+    </form> -->
+    } @else {
+    <h2 class="title has-text-centered has-text-danger">Sorry, we are not accepting new player at the moment</h2>
+    <p class="has-text-centered">Please come back in the future. Thank you!</p>
+    }
+  </div>
 </section>

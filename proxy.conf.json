@@ -9,6 +9,11 @@
     "secure": false,
     "logLevel": "debug"
   },
+  "/api/v1/application/status": {
+    "target": "https://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  },
   "/api/v1/modpacks/timelines": {
     "target": "https://localhost:3000",
     "secure": false,
