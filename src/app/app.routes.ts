@@ -1,62 +1,53 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guard/auth.guard';
-import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
-import { ForbiddenComponent } from './component/forbidden/forbidden.component';
-import { HomeComponent } from './component/home/home.component';
-import { LoginComponent } from './component/login/login.component';
-import { DownloadComponent } from './component/download/download.component';
-import { InstallationComponent } from './component/installation/installation.component';
-import { ContributeComponent } from './component/contribute/contribute.component';
-import { CertificateComponent } from './component/certificate/certificate.component';
-import { ApplicationComponent } from './component/application/application.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    title: 'Home - MMS - Elementbland'
+    title: 'Home - MMS - Elementbland',
+    loadComponent: () => import('./component/home/home.component').then(m => m.HomeComponent)
   },
   {
     path: 'login',
-    component: LoginComponent,
-    title: 'Login Status - MMS - Elementbland'
+    title: 'Login Status - MMS - Elementbland',
+    loadComponent: () => import('./component/login/login.component').then(m => m.LoginComponent)
   },
   {
     path: 'download',
-    component: DownloadComponent,
-    canActivate: [authGuard],
-    title: 'Modpack Download - MMS - Elementbland'
+    title: 'Modpack Download - MMS - Elementbland',
+    loadComponent: () => import('./component/download/download.component').then(m => m.DownloadComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'installation',
-    component: InstallationComponent,
-    canActivate: [authGuard],
-    title: 'Installation Guide - MMS - Elementbland'
+    title: 'Installation Guide - MMS - Elementbland',
+    loadComponent: () => import('./component/installation/installation.component').then(m => m.InstallationComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'contribute',
-    component: ContributeComponent,
-    title: 'Contributors - MMS - Elementbland'
+    title: 'Contributors - MMS - Elementbland',
+    loadComponent: () => import('./component/contribute/contribute.component').then(m => m.ContributeComponent)
   },
   {
     path: 'certificate',
-    component: CertificateComponent,
-    title: 'Certificate - MMS - Elementbland'
+    title: 'Certificate - MMS - Elementbland',
+    loadComponent: () => import('./component/certificate/certificate.component').then(m => m.CertificateComponent)
   },
   {
     path: 'application',
-    component: ApplicationComponent,
-    title: 'Application Form - MMS - Elementbland'
+    title: 'Application Form - MMS - Elementbland',
+    loadComponent: () => import('./component/application/application.component').then(m => m.ApplicationComponent)
   },
   {
     path: '404',
-    component: PageNotFoundComponent,
-    title: 'Page Not Found - MMS - Elementbland'
+    title: 'Page Not Found - MMS - Elementbland',
+    loadComponent: () => import('./component/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent)
   },
   {
     path: '403',
-    component: ForbiddenComponent,
-    title: 'Forbidden - MMS - Elementbland'
+    title: 'Forbidden - MMS - Elementbland',
+    loadComponent: () => import('./component/forbidden/forbidden.component').then(m => m.ForbiddenComponent)
   },
   {
     path: '**',
