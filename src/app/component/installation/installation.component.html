@@ -42,7 +42,7 @@
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
         <div class="select">
-          <select [ngModel]="getSelectedMethod()" (change)="onSelectMethodChanged($event)">
+          <select id="methodSelection" [ngModel]="getSelectedMethod()" (change)="onSelectMethodChanged($event)">
             <option value="Full">Full installation</option>
             <option value="Patch">Update patch</option>
           </select>
