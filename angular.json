@@ -56,12 +56,14 @@
                   "maximumError": "8kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "subresourceIntegrity": true
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
+              "subresourceIntegrity": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

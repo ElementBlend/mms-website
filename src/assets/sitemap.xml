@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mod.elementblend.com/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-05T12:42:44+08:00</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://mod.elementblend.com/contribute/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-03T16:20:33+08:00</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://mod.elementblend.com/certificate/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-03T16:20:33+08:00</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://mod.elementblend.com/application/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-03T16:20:33+08:00</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://mod.elementblend.com/login/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-03T16:20:33+08:00</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://mod.elementblend.com/404/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-03T16:20:33+08:00</lastmod>
     <priority>0.40</priority>
   </url>
   <url>
     <loc>https://mod.elementblend.com/403/</loc>
-    <lastmod>2024-12-25T17:18:33+08:00</lastmod>
+    <lastmod>2025-01-03T16:20:33+08:00</lastmod>
     <priority>0.40</priority>
   </url>
 </urlset>
