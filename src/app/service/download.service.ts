@@ -41,12 +41,16 @@ export class DownloadService {
     return Math.trunc(this.modpackVersions[version]);
   }
 
-  hasModpackInfo(): boolean {
-    if (this.modpackVersions.length === 0 || this.modpackNames.length === 0) {
-      return false;
-    } else {
-      return true;
-    }
+  isModpackInfoReceived(): Observable<boolean> {
+    return new Observable<boolean>(observer => {
+      if (this.modpackVersions.length === 0 || this.modpackNames.length === 0) {
+        observer.next(false);
+        observer.complete();
+      } else {
+        observer.next(true);
+        observer.complete();
+      }
+    });
   }
 
   getModpackInfoFromServer(): Observable<IModpackInfoResponse> {

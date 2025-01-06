@@ -23,7 +23,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
   protected selectedOS: string = "windows";
   private isDownloadButtonClicked: boolean = false;
   private hashValue: string = "";
-  private isDownloadEnabled: boolean = true;
+  private isDownloadEnabled: boolean = false;
+  private alreadyReceivedInfo: boolean = false;
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
@@ -45,16 +46,22 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   private subscribeModpackInfo(): void {
-    if (this.downloadService.hasModpackInfo() === false) {
-      this.downloadService.getModpackInfoFromServer()
-        .pipe(takeUntil(this.destroySubscription))
-        .subscribe({
-          next: (response: IModpackInfoResponse) => {
-            this.downloadService.updateModpackInfo(response);
-            // this.selectedVersion = this.getModpackVersions().length - 1;
+    this.downloadService.isModpackInfoReceived()
+      .pipe(takeUntil(this.destroySubscription))
+      .subscribe({
+        next: (received: boolean) => {
+          if (!received) {
+            this.downloadService.getModpackInfoFromServer()
+              .pipe(takeUntil(this.destroySubscription))
+              .subscribe({
+                next: (response: IModpackInfoResponse) => {
+                  this.downloadService.updateModpackInfo(response);
+                  // this.selectedVersion = this.getModpackVersions().length - 1;
+                }
+              });
           }
-        });
-    }
+        }
+      });
   }
 
   protected getModpackVersions(): number[] {
@@ -86,6 +93,21 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   protected checkisDownloadEnabled(): boolean {
+    if (!this.alreadyReceivedInfo) {
+      this.downloadService.isModpackInfoReceived()
+        .pipe(takeUntil(this.destroySubscription))
+        .subscribe({
+          next: (received: boolean) => {
+            if (!received) {
+              this.isDownloadEnabled = false;
+              this.alreadyReceivedInfo = false;
+            } else {
+              this.isDownloadEnabled = true;
+              this.alreadyReceivedInfo = true;
+            }
+          }
+        });
+    }
     return this.isDownloadEnabled;
   }
 

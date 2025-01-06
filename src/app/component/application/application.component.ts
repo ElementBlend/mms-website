@@ -32,7 +32,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   private subscribeFormStatus(): void {
-    if (this.applicationService.hasCheckedStatus() === false) {
+    if (!this.applicationService.hasCheckedStatus()) {
       this.applicationService.getApplicationFormStatusFromServer()
         .pipe(takeUntil(this.destroySubscription))
         .subscribe({

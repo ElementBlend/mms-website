@@ -63,7 +63,6 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "subresourceIntegrity": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

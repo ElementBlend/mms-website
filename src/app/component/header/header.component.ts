@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private autoLogin(): void {
-    if (this.loginService.getIdentityStatus() === false) {
+    if (!this.loginService.getIdentityStatus()) {
       this.loginService.loginFromServer().pipe(takeUntil(this.destroySubscription)).subscribe();
     }
   }
