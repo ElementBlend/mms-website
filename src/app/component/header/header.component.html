@@ -4,22 +4,21 @@
       <img alt="MMS" src="/assets/images/header-icon.png" width="28px" height="28px" />
     </a>
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" id="navbarButton"
-      [class.is-active]="isActive" (click)="toggleMobileNavbar()">
+      [class.is-active]="getIsActive()" (click)="toggleMobileNavbar()">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </a>
   </div>
 
-  <div id="navbarBasic" class="navbar-menu" [class.is-active]="isActive">
+  <div id="navbarBasic" class="navbar-menu" [class.is-active]="getIsActive()">
     <div class="navbar-start">
-      @for (item of navbarItemsList; track item.name) {
+      @for (item of getNavbarItems(); track item.name) {
       @if (!item.requireAuth || hasAuth()) {
       <a class="navbar-item" [routerLink]="item.link">
         <p>{{ item.name }}</p>
       </a>
-      }
-      }
+      }}
     </div>
     <div class="navbar-end">
       <div class="navbar-item">

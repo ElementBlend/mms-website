@@ -19,7 +19,7 @@
     <label for="downloadOs" class="label">Select download OS type</label>
     <div class="control">
       <div class="select">
-        <select id="downloadOs" [(ngModel)]="selectedOS" (change)="onSelectionChanged()">
+        <select id="downloadOs" [ngModel]="getSelectedOS()" (change)="onSelectedOSChanged($event)">
           <option value="windows">Windows</option>
           <option value="mac">Mac</option>
           <option value="linux">Linux</option>

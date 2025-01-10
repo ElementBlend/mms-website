@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { CertificateService } from '../../service/certificate.service';
@@ -17,27 +17,46 @@ import { MetaControllerService } from './../../service/meta-controller.service';
   styleUrl: './certificate.component.scss'
 })
 export class CertificateComponent implements OnInit, OnDestroy {
-  protected selectedOS: string = "windows";
+  private selectedOS: string = "windows";
   private isDownloadButtonClicked: boolean = false;
   private hashValue: string = "";
   private isDownloadEnabled: boolean = true;
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private _elementRef: ElementRef, private certificateService: CertificateService, private metaControllerService: MetaControllerService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private certificateService: CertificateService, private metaControllerService: MetaControllerService) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.setupSEOTags();
   }
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/certificate/";
-
     this.metaControllerService.setMetaTag("description", "This is the certificate related page for users to access the ElementBlend MMS modpack. You can download the certificate standalone application here.");
     this.metaControllerService.setMetaTag("og:title", "Certificate");
     this.metaControllerService.setMetaTag("og:url", link);
     this.metaControllerService.updateCanonicalUrl(link);
+  }
+
+  protected getSelectedOS(): string {
+    return this.selectedOS;
+  }
+
+  protected onSelectedOSChanged(event: Event): void {
+    this.isDownloadButtonClicked = false;
+    this.hashValue = "";
+    if (!event.target) {
+      throw new Error("Event target not found");
+    }
+    const target = event.target as HTMLSelectElement;
+    this.selectedOS = target.value;
+    // Temp function for removeing other options since they are not implemented
+    if (this.selectedOS === "linux") {
+      this.isDownloadEnabled = false;
+    } else {
+      this.isDownloadEnabled = true;
+    }
   }
 
   protected getisDownloadEnabled(): boolean {
@@ -73,7 +92,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
         next: (response: HttpResponse<Blob>) => {
           const contentDisposition = response.headers.get('Content-Disposition');
           let fileName: string = `cert-installer-${type}.7z`;
-
           if (contentDisposition) {
             const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
             const matches = filenameRegex.exec(contentDisposition);
@@ -83,12 +101,14 @@ export class CertificateComponent implements OnInit, OnDestroy {
           }
 
           const url = window.URL.createObjectURL(response.body as Blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.target = "_blank";
-          link.referrerPolicy = "no-referrer nopener";
-          link.download = fileName;
+          const link = this.renderer.createElement('a');
+          this.renderer.setAttribute(link, 'href', url);
+          this.renderer.setAttribute(link, 'target', '_blank');
+          this.renderer.setAttribute(link, 'rel', 'noreferrer noopener');
+          this.renderer.setAttribute(link, 'download', fileName);
+          this.renderer.appendChild(document.body, link);
           link.click();
+          this.renderer.removeChild(document.body, link);
           window.URL.revokeObjectURL(url);
         }
       });
@@ -112,16 +132,5 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.destroySubscription.next(true);
     this.destroySubscription.complete();
     clearTimeout(this.downloadTimeout);
-  }
-
-  // Temp function for removeing other options since they are not implemented
-  protected onSelectionChanged(): void {
-    this.isDownloadButtonClicked = false;
-    this.hashValue = "";
-    if (this.selectedOS === "linux") {
-      this.isDownloadEnabled = false;
-    } else {
-      this.isDownloadEnabled = true;
-    }
   }
 }

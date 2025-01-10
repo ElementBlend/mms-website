@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { TimelineModpackService } from '../../service/timeline-modpack.service';
@@ -15,10 +15,10 @@ import { ITimelineResponse } from '../../interface/timeline-response';
 export class TimelineModpackComponent implements OnInit, OnDestroy {
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private timelineService: TimelineModpackService, private _elementRef: ElementRef) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private timelineService: TimelineModpackService) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.fetchTimelineData();
   }
 

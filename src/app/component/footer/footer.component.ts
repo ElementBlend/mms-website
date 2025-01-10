@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -8,9 +8,9 @@ import { Component, ElementRef, OnInit } from '@angular/core';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent implements OnInit {
-  constructor(private _elementRef: ElementRef) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
   }
 }

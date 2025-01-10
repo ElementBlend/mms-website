@@ -1,12 +1,16 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetaControllerService {
-  constructor(private meta: Meta, @Inject(DOCUMENT) private document: Document) { }
+  private renderer: Renderer2;
+
+  constructor(rendererFactory: RendererFactory2, private meta: Meta, @Inject(DOCUMENT) private document: Document) {
+    this.renderer = rendererFactory.createRenderer(null, null);
+  }
 
   setMetaTag(tagName: string, tagContent: string): void {
     if (this.meta.getTag(`name='${tagName}'`) == null) {
@@ -27,11 +31,12 @@ export class MetaControllerService {
   updateCanonicalUrl(url: string): void {
     const head = this.document.getElementsByTagName('head')[0];
     let element: HTMLLinkElement = this.document.querySelector('link[rel="canonical"]') as HTMLLinkElement || null;
+
     if (element == null) {
-      element = this.document.createElement('link') as HTMLLinkElement;
-      element.setAttribute('rel', 'canonical');
-      head.appendChild(element);
+      element = this.renderer.createElement('link') as HTMLLinkElement;
+      this.renderer.setAttribute(element, 'rel', 'canonical');
+      this.renderer.appendChild(head, element);
     }
-    element.setAttribute('href', url);
+    this.renderer.setAttribute(element, 'href', url);
   }
 }

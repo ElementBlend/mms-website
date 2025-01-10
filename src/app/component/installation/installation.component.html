@@ -58,18 +58,18 @@
         @for(step of getSelectedSteps(); track step; let idx = $index) {
         <div class="media">
           <div class="media-content">
-            <p class="has-text-success">Step {{idx + 1}}: {{step.description}}</p>
+            <p class="has-text-success">Step {{ idx + 1 }}: {{ step.description }}</p>
             @if (step.remark) {
-            <p class="has-text-warning">Note: {{step.remark}}</p>
+            <p class="has-text-warning">Note: {{ step.remark }}</p>
             }
             <div class="card">
               <div class="card-header">
-                <a id="step{{idx + 1}}Header" class="card-header-title" (click)="ontoggleImageClicked(idx + 1)">Click to
-                  expand image</a>
+                <a #stepHeaderRef id="step{{ idx + 1 }}Header" class="card-header-title" (click)="ontoggleImageClicked(idx + 1)">Click
+                  to expand image</a>
               </div>
-              <div id="step{{idx + 1}}Image" class="card-content" [ngClass]="{ 'is-hidden': getHiddenStatus() }">
+              <div #stepImageRef id="step{{ idx + 1 }}Image" class="card-content" [ngClass]="{ 'is-hidden': getHiddenStatus() }">
                 <figure class="image is-16by9">
-                  <img src="{{getImageUrl(idx + 1) }}" alt="{{getImageAlt(idx + 1) }}">
+                  <img src="{{ getImageUrl(idx + 1) }}" alt="{{ getImageAlt(idx + 1) }}">
                 </figure>
               </div>
             </div>

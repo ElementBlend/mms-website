@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IInstallationStep } from '../../interface/installation-step';
 import { InstallationGuideService } from '../../service/installation-guide.service';
@@ -19,17 +19,18 @@ export class InstallationComponent implements OnInit {
   private selectedOS: string = "Windows";
   private selectedMethod: string = "Full";
   private isHidden: boolean = true;
+  @ViewChildren('stepHeaderRef') private stepHeaders: QueryList<ElementRef> = new QueryList<ElementRef>();
+  @ViewChildren('stepImageRef') private stepImages: QueryList<ElementRef> = new QueryList<ElementRef>();
 
-  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService, private stepsService: InstallationGuideService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private stepsService: InstallationGuideService) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.setupSEOTags();
   }
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/installation/";
-
     this.metaControllerService.setMetaTag("description", "This is the installation guide for the ElementBlend MMS modpack. You can find the installation steps here.");
     this.metaControllerService.setMetaTag("og:title", "Installation Guide");
     this.metaControllerService.setMetaTag("og:url", link);
@@ -66,18 +67,20 @@ export class InstallationComponent implements OnInit {
   }
 
   protected ontoggleImageClicked(stepNum: number): void {
-    const stepHeader = document.getElementById('step' + stepNum + 'Header');
-    const image = document.getElementById('step' + stepNum + 'Image');
-    if (!image || !stepHeader) {
+    const headerID = 'step' + stepNum + 'Header';
+    const headerElement = this.stepHeaders.find((element: { nativeElement: { id: string; }; }) => element.nativeElement.id === headerID)?.nativeElement;
+    const imageID = 'step' + stepNum + 'Image';
+    const imageElement = this.stepImages.find((element: { nativeElement: { id: string; }; }) => element.nativeElement.id === imageID)?.nativeElement;
+    if (!imageElement || !headerElement) {
       throw new Error("Image or header not found");
     }
 
-    if (image.classList.contains('is-hidden')) {
-      image.classList.remove('is-hidden');
-      stepHeader.textContent = "Click to collapse image";
+    if (imageElement.classList.contains('is-hidden')) {
+      this.renderer.removeClass(imageElement, 'is-hidden');
+      this.renderer.setProperty(headerElement, 'textContent', "Click to collapse image");
     } else {
-      image.classList.add('is-hidden');
-      stepHeader.textContent = "Click to expand image";
+      this.renderer.addClass(imageElement, 'is-hidden');
+      this.renderer.setProperty(headerElement, 'textContent', "Click to expand image");
     }
   }
 

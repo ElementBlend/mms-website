@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { NavbarHeaderService } from '../../service/navbar-header.service';
@@ -14,14 +14,14 @@ import { INavbar } from '../../interface/navbar';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  protected isActive: boolean = false;
-  protected navbarItemsList: INavbar[] = [];
+  private isActive: boolean = false;
+  private navbarItemsList: INavbar[] = [];
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private navbarHeaderService: NavbarHeaderService, private darkThemeService: DarkThemeService, private loginService: LoginService, private elementRef: ElementRef, private router: Router) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private navbarHeaderService: NavbarHeaderService, private loginService: LoginService, private darkThemeService: DarkThemeService, private router: Router) { }
 
   ngOnInit(): void {
-    this.elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
     this.autoLogin();
     this.closeMobileNavbar();
@@ -43,6 +43,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  protected getIsActive(): boolean {
+    return this.isActive;
+  }
+
+  protected getNavbarItems(): INavbar[] {
+    return this.navbarItemsList;
   }
 
   protected getUsername(): string {

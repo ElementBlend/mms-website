@@ -9,7 +9,7 @@
     <div class="column is-one-third">
       <div class="card">
         <div class="card-content">
-          <p class="subtitle is-3">{{ getModpackName() }}</p>
+          <h2 class="subtitle is-3">{{ getModpackName() }}</h2>
           <figure class="image">
             <img [src]="getModpackImage()" [alt]="getModpackImageAlt()">
           </figure>
@@ -22,7 +22,7 @@
         <label for="downloadVersion" class="label">Select Modpack Version</label>
         <div class="control">
           <div class="select">
-            <select id="downloadVersion" [(ngModel)]="selectedVersion" (change)="onSelectionChanged()">
+            <select id="downloadVersion" [ngModel]="getSelectedVersion()" (change)="onSelectionChanged($event)">
               @for (version of getModpackVersions(); track version; let idx = $index) {
               <option [value]=idx>Version {{version}}</option>
               }
@@ -35,7 +35,7 @@
         <label for="downloadOption" class="label">Select Download Option</label>
         <div class="control">
           <div class="select">
-            <select id="downloadOption" [(ngModel)]="selectedDownloadOption" (change)="onSelectionChanged()">
+            <select id="downloadOption" [ngModel]="getSelectedDownloadOption()" (change)="onSelectionChanged($event)">
               <option value="modpack">Modpack</option>
               <option value="world">World</option>
             </select>
@@ -43,12 +43,12 @@
         </div>
       </div>
 
-      @if (selectedDownloadOption === "modpack") {
+      @if (getSelectedDownloadOption() === "modpack") {
       <div class="field">
         <label for="downloadType" class="label">Select Modpack Type</label>
         <div class="control">
           <div class="select">
-            <select id="downloadType" [(ngModel)]="selectedType" (change)="onSelectionChanged()">
+            <select id="downloadType" [ngModel]="getSelectedType()" (change)="onSelectionChanged($event)">
               <option value="full-installer">Full Installer</option>
               <option value="update-patches">Update Patches</option>
             </select>
@@ -60,7 +60,7 @@
         <label for="downloadOs" class="label">Select OS</label>
         <div class="control">
           <div class="select">
-            <select id="downloadOs" [(ngModel)]="selectedOS" (change)="onSelectionChanged()">
+            <select id="downloadOs" [ngModel]="getSelectedOS()" (change)="onSelectionChanged($event)">
               <option value="windows">Windows</option>
               <option value="mac">Mac</option>
               <option value="linux">Linux</option>

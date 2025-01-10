@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
@@ -17,10 +17,10 @@ import { MetaControllerService } from '../../service/meta-controller.service';
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
-  protected selectedVersion: number = 0;
-  protected selectedDownloadOption: string = "modpack";
-  protected selectedType: string = "full-installer";
-  protected selectedOS: string = "windows";
+  private selectedVersion: number = 0;
+  private selectedDownloadOption: string = "modpack";
+  private selectedType: string = "full-installer";
+  private selectedOS: string = "windows";
   private isDownloadButtonClicked: boolean = false;
   private hashValue: string = "";
   private isDownloadEnabled: boolean = false;
@@ -28,17 +28,16 @@ export class DownloadComponent implements OnInit, OnDestroy {
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService, private downloadService: DownloadService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private downloadService: DownloadService) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.setupSEOTags();
     this.subscribeModpackInfo();
   }
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/download/";
-
     this.metaControllerService.setMetaTag("description", "This is the download page for the ElementBlend MMS modpack. You can download the modpack here.");
     this.metaControllerService.setMetaTag("og:title", "Download");
     this.metaControllerService.setMetaTag("og:url", link);
@@ -64,8 +63,59 @@ export class DownloadComponent implements OnInit, OnDestroy {
       });
   }
 
+  protected getSelectedVersion(): number {
+    return this.selectedVersion;
+  }
+
   protected getModpackVersions(): number[] {
     return this.downloadService.getModpackVersions();
+  }
+
+  protected getSelectedDownloadOption(): string {
+    return this.selectedDownloadOption;
+  }
+
+  protected getSelectedType(): string {
+    return this.selectedType;
+  }
+
+  protected getSelectedOS(): string {
+    return this.selectedOS;
+  }
+
+  protected onSelectionChanged(event: Event): void {
+    this.isDownloadButtonClicked = false;
+    this.hashValue = "";
+    if (!event.target) {
+      throw new Error("Event target not found");
+    }
+
+    const target = event.target as HTMLSelectElement;
+    const id = target.id;
+    const value = target.value;
+    switch (id) {
+      case "downloadVersion":
+        this.selectedVersion = parseInt(value, 10);
+        break;
+      case "downloadOption":
+        this.selectedDownloadOption = value;
+        break;
+      case "downloadType":
+        this.selectedType = value;
+        break;
+      case "downloadOs":
+        this.selectedOS = value;
+        break;
+      default:
+        throw new Error("Invalid selection id");
+    }
+
+    // Temp function for removeing other options since they are not implemented
+    if (this.selectedDownloadOption !== "modpack" || this.selectedOS !== "windows") {
+      this.isDownloadEnabled = false;
+    } else {
+      this.isDownloadEnabled = true;
+    }
   }
 
   protected getModpackName(): string {
@@ -123,12 +173,13 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   private downloadModpack(version: number, option: string, type: string, os: string): void {
     const url = this.downloadService.getDownloadModpackUrlFromServer(version, option, type, os);
-    const link = document.createElement("a");
-    link.href = url;
-    link.target = "_blank";
-    document.body.appendChild(link);
+    const link = this.renderer.createElement('a');
+    this.renderer.setAttribute(link, 'href', url);
+    this.renderer.setAttribute(link, 'target', '_blank');
+    this.renderer.setAttribute(link, 'rel', 'noreferrer noopener');
+    this.renderer.appendChild(document.body, link);
     link.click();
-    document.body.removeChild(link);
+    this.renderer.removeChild(document.body, link);
 
     this.isDownloadEnabled = false;
     this.downloadTimeout = setTimeout(() => {
@@ -150,16 +201,5 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.destroySubscription.next(true);
     this.destroySubscription.complete();
     clearTimeout(this.downloadTimeout);
-  }
-
-  // Temp function for removeing other options since they are not implemented
-  protected onSelectionChanged(): void {
-    this.isDownloadButtonClicked = false;
-    this.hashValue = "";
-    if (this.selectedDownloadOption !== "modpack" || this.selectedOS !== "windows") {
-      this.isDownloadEnabled = false;
-    } else {
-      this.isDownloadEnabled = true;
-    }
   }
 }

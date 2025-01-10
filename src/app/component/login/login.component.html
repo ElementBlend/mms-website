@@ -1,21 +1,21 @@
 <section class="hero is-primary">
   <div class="hero-body">
-    <p class="title">Login Status</p>
+    <h1 class="title">Login Status</h1>
   </div>
 </section>
 
 <section class="section">
   @if (getLoginStatus() === true) {
   <div class="has-text-centered has-text-success label">
-    <p>You have been logged in</p>
+    <h2>You have been logged in</h2>
   </div>
   } @else {
   <div class="has-text-centered has-text-danger label">
-    <p>You are not logged in yet</p>
-    <p>
+    <h2>You are not logged in yet</h2>
+    <h3>
       This website is protected by a login system using two-way SSL. If you have the login authorization like a
       certificate, you can log in by restarting your browser and revisiting this website.
-    </p>
+    </h3>
   </div>
   }
 </section>

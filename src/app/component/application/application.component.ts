@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MetaControllerService } from '../../service/meta-controller.service';
 import { ApplicationService } from '../../service/application.service';
@@ -14,17 +14,16 @@ import { IApplicationStatusResponse } from '../../interface/application-status-r
 export class ApplicationComponent implements OnInit, OnDestroy {
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService, private applicationService: ApplicationService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private applicationService: ApplicationService) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.setupSEOTags();
     this.subscribeFormStatus();
   }
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/application/";
-
     this.metaControllerService.setMetaTag("description", "This is the page where users can apply for accessing the ElementBlend MMS modpack server. You can fill out the application form here.");
     this.metaControllerService.setMetaTag("og:title", "Application");
     this.metaControllerService.setMetaTag("og:url", link);

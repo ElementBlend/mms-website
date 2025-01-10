@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { LoginService } from '../../service/login.service';
 import { MetaControllerService } from '../../service/meta-controller.service';
 
@@ -10,16 +10,15 @@ import { MetaControllerService } from '../../service/meta-controller.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-  constructor(private _elementRef: ElementRef, private metaControllerService: MetaControllerService, private loginService: LoginService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private loginService: LoginService) { }
 
   ngOnInit(): void {
-    this._elementRef.nativeElement.removeAttribute("ng-version");
+    this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.setupSEOTags();
   }
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/login/";
-
     this.metaControllerService.setMetaTag("description", "This is the login page for the ElementBlend MMS website. You can check the login status here.");
     this.metaControllerService.setMetaTag("og:title", "Login");
     this.metaControllerService.setMetaTag("og:url", link);
