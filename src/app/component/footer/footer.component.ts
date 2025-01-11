@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
-  standalone: true,
   imports: [],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'

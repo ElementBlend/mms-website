@@ -7,7 +7,6 @@ import { ITimelineResponse } from '../../interface/timeline-response';
 
 @Component({
   selector: 'app-timeline-modpack',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './timeline-modpack.component.html',
   styleUrl: './timeline-modpack.component.scss'

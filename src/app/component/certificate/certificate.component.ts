@@ -8,7 +8,6 @@ import { MetaControllerService } from './../../service/meta-controller.service';
 
 @Component({
   selector: 'app-certificate',
-  standalone: true,
   imports: [
     FormsModule,
     CommonModule

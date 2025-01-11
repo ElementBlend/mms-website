@@ -4,7 +4,6 @@ import { MetaControllerService } from '../../service/meta-controller.service';
 
 @Component({
   selector: 'app-forbidden',
-  standalone: true,
   imports: [RouterModule],
   templateUrl: './forbidden.component.html',
   styleUrl: './forbidden.component.scss'

@@ -6,7 +6,6 @@ import { IApplicationStatusResponse } from '../../interface/application-status-r
 
 @Component({
   selector: 'app-application',
-  standalone: true,
   imports: [],
   templateUrl: './application.component.html',
   styleUrl: './application.component.scss'

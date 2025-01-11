@@ -4,7 +4,6 @@ import { MetaControllerService } from './../../service/meta-controller.service';
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [TimelineModpackComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

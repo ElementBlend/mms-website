@@ -4,7 +4,6 @@ import { MetaControllerService } from '../../service/meta-controller.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
