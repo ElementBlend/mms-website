@@ -2,8 +2,7 @@
 Comment: User-ID:	Sam Lam <admin@elementblend.com>
 Comment: Valid from:	25/10/2024 17:14
 Comment: Valid until:	25/10/2029 12:00
-Comment: Type:	4,096-bit RSA (secret key available)
-Comment: Usage:	Signing, Encryption, Certifying User-IDs, SSH Authentication
+Comment: Type:	4,096-bit RSA
 Comment: Fingerprint:	8CFB984F254F2CFCCE9D46EBCF9B5C87810AA2B3
 
 
