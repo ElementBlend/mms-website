@@ -1,39 +1,53 @@
+import { LoginService } from './../../service/login.service';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IInstallationStep } from '../../interface/installation-step';
 import { InstallationGuideService } from '../../service/installation-guide.service';
 import { MetaControllerService } from '../../service/meta-controller.service';
+import { PermissionDirective } from '../../directive/permission.directive';
 
 @Component({
   selector: 'app-installation',
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    PermissionDirective
   ],
   templateUrl: './installation.component.html',
   styleUrl: './installation.component.scss'
 })
 export class InstallationComponent implements OnInit {
+  private hasPermission: boolean = false;
   private selectedOS: string = "Windows";
   private selectedMethod: string = "Full";
   private isHidden: boolean = true;
   @ViewChildren('stepHeaderRef') private stepHeaders: QueryList<ElementRef> = new QueryList<ElementRef>();
   @ViewChildren('stepImageRef') private stepImages: QueryList<ElementRef> = new QueryList<ElementRef>();
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private stepsService: InstallationGuideService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private loginService: LoginService, private metaControllerService: MetaControllerService, private stepsService: InstallationGuideService) { }
 
   ngOnInit(): void {
     this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
+    this.checkPermission();
     this.setupSEOTags();
+  }
+
+  protected getPermissionStatus(): boolean {
+    return this.hasPermission;
+  }
+
+  private checkPermission(): void {
+    this.hasPermission = this.loginService.getAuthStatus();
   }
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/installation/";
-    this.metaControllerService.setMetaTag("description", "This is the installation guide for the ElementBlend MMS modpack. You can find the installation steps here.");
-    this.metaControllerService.setMetaTag("og:title", "Installation Guide");
-    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.setMetaTag("name", "description", "This is the installation guide for the ElementBlend MMS modpack. You can find the installation steps here.");
+    this.metaControllerService.setMetaTag("property", "og:title", "Installation Guide");
+    this.metaControllerService.setMetaTag("property", "og:url", link);
     this.metaControllerService.updateCanonicalUrl(link);
+    this.metaControllerService.updateAlternateUrl(link, "en");
   }
 
   protected getSelectedOS(): string {

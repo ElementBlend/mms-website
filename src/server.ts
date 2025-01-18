@@ -3,11 +3,9 @@ import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import bootstrap from './src/main.server';
+import bootstrap from './main.server';
 import fs from 'fs';
 import https from 'https';
-// import { createProxyMiddleware } from 'http-proxy-middleware';
-// import { environment } from './src/environments/environment';
 
 export function app(): express.Express {
   const server = express();
@@ -15,15 +13,9 @@ export function app(): express.Express {
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
   const commonEngine = new CommonEngine();
-  // const backendDomain = environment.backendDomain;
-  // const backendPort = environment.backendPort;
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
-
-  // server.use('/api/', createProxyMiddleware({
-  //   target: `https://${backendDomain}:${backendPort}`
-  // }));
 
   // Serve static files from /browser
   server.get('*.*', express.static(browserDistFolder, {

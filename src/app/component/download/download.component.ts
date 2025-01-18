@@ -5,17 +5,21 @@ import { Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
 import { IModpackInfoResponse } from '../../interface/modpack-info-response';
 import { MetaControllerService } from '../../service/meta-controller.service';
+import { PermissionDirective } from '../../directive/permission.directive';
+import { LoginService } from '../../service/login.service';
 
 @Component({
   selector: 'app-download',
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    PermissionDirective
   ],
   templateUrl: './download.component.html',
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
+  private hasPermission: boolean = false;
   private selectedVersion: number = 0;
   private selectedDownloadOption: string = "modpack";
   private selectedType: string = "full-installer";
@@ -27,20 +31,30 @@ export class DownloadComponent implements OnInit, OnDestroy {
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private downloadService: DownloadService) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, private loginService: LoginService, private metaControllerService: MetaControllerService, private downloadService: DownloadService) { }
 
   ngOnInit(): void {
     this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
+    this.checkPermission();
     this.setupSEOTags();
     this.subscribeModpackInfo();
   }
 
+  protected getPermissionStatus(): boolean {
+    return this.hasPermission;
+  }
+
+  private checkPermission(): void {
+    this.hasPermission = this.loginService.getAuthStatus();
+  }
+
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/download/";
-    this.metaControllerService.setMetaTag("description", "This is the download page for the ElementBlend MMS modpack. You can download the modpack here.");
-    this.metaControllerService.setMetaTag("og:title", "Download");
-    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.setMetaTag("name", "description", "This is the download page for the ElementBlend MMS modpack. You can download the modpack here.");
+    this.metaControllerService.setMetaTag("property", "og:title", "Download");
+    this.metaControllerService.setMetaTag("property", "og:url", link);
     this.metaControllerService.updateCanonicalUrl(link);
+    this.metaControllerService.updateAlternateUrl(link, "en");
   }
 
   private subscribeModpackInfo(): void {

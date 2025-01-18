@@ -1,82 +1,89 @@
-<section class="hero is-primary">
-  <div class="hero-body">
-    <h1 class="title">Installation Guide</h1>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <h2 class="title has-text-centered">Modpack Installation Pre Requirement</h2>
-
-    <div class="box">
-      <div class="content">
-        <h3>Before you install our Modpack, make sure you have the following:</h3>
-        <ul>
-          <li>At least 8GB of RAM allocated to Minecraft.</li>
-          <li>At least 2GB of free disk space.</li>
-          <li>Minecraft <a href="https://www.minecraft.net/en-us/download" target="_blank">Java Edition</a> installed on
-            your computer.</li>
-          <li>You should have <a href="https://adoptium.net/temurin/releases/?os=windows&package=jre&version=8"
-              target="_blank">Java 8</a> installed on your computer. Depending on the Minecraft version, you may need to
-            install <a href="https://adoptium.net/temurin/releases/?os=windows&package=jre&version=17"
-              target="_blank">Java 17</a> or higher as well.</li>
-          <li><a href="https://files.minecraftforge.net/net/minecraftforge/forge/" target="_blank">Forge</a>
-            or <a href="https://fabricmc.net/use/installer/" target="_blank">Fabric</a> installed on your computer based
-            on the Modpack requirement.</li>
-        </ul>
-      </div>
+<ng-container *appPermission="getPermissionStatus()">
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <h1 class="title">Installation Guide</h1>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section">
-  <div class="container">
-    <h2 class="title has-text-centered">Modpack Installation</h2>
+  <section class="section">
+    <div class="container">
+      <h2 class="title has-text-centered">Modpack Installation Pre Requirement</h2>
 
-    <div class="buttons is-centered">
-      <button class="button is-primary" (click)="onSelectedOSClicked('Windows')">Windows</button>
-      <button class="button is-danger" (click)="onSelectedOSClicked('Mac')" disabled>Mac</button>
-      <button class="button is-danger" (click)="onSelectedOSClicked('Linux')" disabled>Linux</button>
-    </div>
-
-    <div class="field is-grouped is-grouped-centered">
-      <div class="control">
-        <div class="select">
-          <select id="methodSelection" [ngModel]="getSelectedMethod()" (change)="onSelectMethodChanged($event)">
-            <option value="Full">Full installation</option>
-            <option value="Patch">Update patch</option>
-          </select>
+      <div class="box">
+        <div class="content">
+          <h3>Before you install our Modpack, make sure you have the following:</h3>
+          <ul>
+            <li>At least 8GB of RAM allocated to Minecraft.</li>
+            <li>At least 2GB of free disk space.</li>
+            <li>Minecraft <a href="https://www.minecraft.net/en-us/download" target="_blank">Java Edition</a> installed
+              on
+              your computer.</li>
+            <li>You should have <a href="https://adoptium.net/temurin/releases/?os=windows&package=jre&version=8"
+                target="_blank">Java 8</a> installed on your computer. Depending on the Minecraft version, you may need
+              to
+              install <a href="https://adoptium.net/temurin/releases/?os=windows&package=jre&version=17"
+                target="_blank">Java 17</a> or higher as well.</li>
+            <li><a href="https://files.minecraftforge.net/net/minecraftforge/forge/" target="_blank">Forge</a>
+              or <a href="https://fabricmc.net/use/installer/" target="_blank">Fabric</a> installed on your computer
+              based
+              on the Modpack requirement.</li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="container">
-    <div class="box">
-      <div class="content">
-        <h3>{{ getSelectedOS() }} - {{ getSelectedMethod() }} - Installation:</h3>
-        @for(step of getSelectedSteps(); track step; let idx = $index) {
-        <div class="media">
-          <div class="media-content">
-            <p class="has-text-success">Step {{ idx + 1 }}: {{ step.description }}</p>
-            @if (step.remark) {
-            <p class="has-text-warning">Note: {{ step.remark }}</p>
-            }
-            <div class="card">
-              <div class="card-header">
-                <a #stepHeaderRef id="step{{ idx + 1 }}Header" class="card-header-title" (click)="ontoggleImageClicked(idx + 1)">Click
-                  to expand image</a>
-              </div>
-              <div #stepImageRef id="step{{ idx + 1 }}Image" class="card-content" [ngClass]="{ 'is-hidden': getHiddenStatus() }">
-                <figure class="image is-16by9">
-                  <img src="{{ getImageUrl(idx + 1) }}" alt="{{ getImageAlt(idx + 1) }}">
-                </figure>
+  <section class="section">
+    <div class="container">
+      <h2 class="title has-text-centered">Modpack Installation</h2>
+
+      <div class="buttons is-centered">
+        <button class="button is-primary" (click)="onSelectedOSClicked('Windows')">Windows</button>
+        <button class="button is-danger" (click)="onSelectedOSClicked('Mac')" disabled>Mac</button>
+        <button class="button is-danger" (click)="onSelectedOSClicked('Linux')" disabled>Linux</button>
+      </div>
+
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <div class="select">
+            <select id="methodSelection" [ngModel]="getSelectedMethod()" (change)="onSelectMethodChanged($event)">
+              <option value="Full">Full installation</option>
+              <option value="Patch">Update patch</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="box">
+        <div class="content">
+          <h3>{{ getSelectedOS() }} - {{ getSelectedMethod() }} - Installation:</h3>
+          @for(step of getSelectedSteps(); track step; let idx = $index) {
+          <div class="media">
+            <div class="media-content">
+              <p class="has-text-success">Step {{ idx + 1 }}: {{ step.description }}</p>
+              @if (step.remark) {
+              <p class="has-text-warning">Note: {{ step.remark }}</p>
+              }
+              <div class="card">
+                <div class="card-header">
+                  <a #stepHeaderRef id="step{{ idx + 1 }}Header" class="card-header-title"
+                    (click)="ontoggleImageClicked(idx + 1)">Click
+                    to expand image</a>
+                </div>
+                <div #stepImageRef id="step{{ idx + 1 }}Image" class="card-content"
+                  [ngClass]="{ 'is-hidden': getHiddenStatus() }">
+                  <figure class="image is-16by9">
+                    <img src="{{ getImageUrl(idx + 1) }}" alt="{{ getImageAlt(idx + 1) }}">
+                  </figure>
+                </div>
               </div>
             </div>
           </div>
+          }
         </div>
-        }
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</ng-container>

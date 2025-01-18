@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guard/auth.guard';
+// import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
   {
@@ -15,14 +15,14 @@ export const routes: Routes = [
   {
     path: 'download',
     title: 'Modpack Download - MMS - Elementbland',
-    loadComponent: () => import('./component/download/download.component').then(m => m.DownloadComponent),
-    canActivate: [authGuard]
+    loadComponent: () => import('./component/download/download.component').then(m => m.DownloadComponent)
+    // canActivate: [authGuard]
   },
   {
     path: 'installation',
     title: 'Installation Guide - MMS - Elementbland',
-    loadComponent: () => import('./component/installation/installation.component').then(m => m.InstallationComponent),
-    canActivate: [authGuard]
+    loadComponent: () => import('./component/installation/installation.component').then(m => m.InstallationComponent)
+    // canActivate: [authGuard]
   },
   {
     path: 'contribute',

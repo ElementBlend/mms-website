@@ -32,10 +32,11 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/certificate/";
-    this.metaControllerService.setMetaTag("description", "This is the certificate related page for users to access the ElementBlend MMS modpack. You can download the certificate standalone application here.");
-    this.metaControllerService.setMetaTag("og:title", "Certificate");
-    this.metaControllerService.setMetaTag("og:url", link);
+    this.metaControllerService.setMetaTag("name", "description", "This is the certificate related page for users to access the ElementBlend MMS modpack. You can download the certificate standalone application here.");
+    this.metaControllerService.setMetaTag("property", "og:title", "Certificate");
+    this.metaControllerService.setMetaTag("property", "og:url", link);
     this.metaControllerService.updateCanonicalUrl(link);
+    this.metaControllerService.updateAlternateUrl(link, "en");
   }
 
   protected getSelectedOS(): string {
