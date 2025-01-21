@@ -1,10 +1,14 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { TimelineModpackComponent } from '../timeline-modpack/timeline-modpack.component';
+import { HomeTimelineComponent } from '../home-timeline/home-timeline.component';
+import { HomeInfoComponent } from '../home-info/home-info.component';
 import { MetaControllerService } from './../../service/meta-controller.service';
 
 @Component({
   selector: 'app-home',
-  imports: [TimelineModpackComponent],
+  imports: [
+    HomeTimelineComponent,
+    HomeInfoComponent
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

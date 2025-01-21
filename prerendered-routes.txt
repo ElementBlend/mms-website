@@ -1,6 +1,5 @@
 /
 /404
-/403
 /login
 /certificate
 /contribute

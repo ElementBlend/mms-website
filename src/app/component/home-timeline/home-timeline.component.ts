@@ -8,10 +8,10 @@ import { ITimelineResponse } from '../../interface/timeline-response';
 @Component({
   selector: 'app-timeline-modpack',
   imports: [CommonModule],
-  templateUrl: './timeline-modpack.component.html',
-  styleUrl: './timeline-modpack.component.scss'
+  templateUrl: './home-timeline.component.html',
+  styleUrl: './home-timeline.component.scss'
 })
-export class TimelineModpackComponent implements OnInit, OnDestroy {
+export class HomeTimelineComponent implements OnInit, OnDestroy {
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
   constructor(private renderer: Renderer2, private elementRef: ElementRef, private timelineService: TimelineModpackService) { }

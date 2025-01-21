@@ -45,11 +45,6 @@ export const routes: Routes = [
     loadComponent: () => import('./component/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent)
   },
   {
-    path: '403',
-    title: 'Forbidden - MMS - Elementbland',
-    loadComponent: () => import('./component/forbidden/forbidden.component').then(m => m.ForbiddenComponent)
-  },
-  {
     path: '**',
     redirectTo: '/404'
   }

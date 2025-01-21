@@ -1,0 +1,34 @@
+<div class="container">
+  <h2 class="title has-text-centered">Server Timeline</h2>
+  <div class="box">
+    <div class="timeline is-centered">
+      @for (data of getTimelineData(); track data.title) {
+      @for (item of getObjectKeys(data); track item) {
+      <div class="timeline-item" [ngClass]="getDataColor(data.color)">
+        <div class="timeline-marker" [ngClass]="getDataColor(data.color)">
+        </div>
+        <div class="timeline-content">
+          <p>
+            {{ item }}
+            <br>
+            {{ data.timeline[item] }}
+          </p>
+        </div>
+      </div>
+      }
+      @if (getVersionDuration(getObjectKeys(data)) > 1 && !data.inProgress) {
+      <div class="timeline-item" [ngClass]="getDataColor(data.color)">
+        <header>
+          Total Duration in {{ data.title }}: {{ getVersionDuration(getObjectKeys(data)) }} days
+        </header>
+      </div>
+      }
+      <header class="timeline-header">
+        <h3 class="tag is-large" [ngClass]="getDataColor(data.color)">
+          {{ data.title }}
+        </h3>
+      </header>
+      }
+    </div>
+  </div>
+</div>
