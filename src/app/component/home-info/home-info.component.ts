@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home-info',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './home-info.component.html',
   styleUrl: './home-info.component.scss'
 })
