@@ -1,11 +1,12 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ForbiddenComponent } from '../component/forbidden/forbidden.component';
 
 @Directive({
   selector: '[appPermission]'
 })
 export class PermissionDirective implements OnInit {
-  @Input('appPermission') requiredPermission: boolean = false;
+  @Input('appPermission') requiredPermission: Observable<boolean> = new Observable<boolean>();
 
   constructor(private viewContaiiner: ViewContainerRef, private templateRef: TemplateRef<unknown>) { }
 
@@ -14,11 +15,13 @@ export class PermissionDirective implements OnInit {
   }
 
   private checkPermission(): void {
-    if (this.requiredPermission) {
-      this.viewContaiiner.createEmbeddedView(this.templateRef);
-    } else {
+    this.requiredPermission.subscribe((permission: boolean) => {
       this.viewContaiiner.clear();
-      this.viewContaiiner.createComponent(ForbiddenComponent);
-    }
+      if (permission) {
+        this.viewContaiiner.createEmbeddedView(this.templateRef);
+      } else {
+        this.viewContaiiner.createComponent(ForbiddenComponent);
+      }
+    });
   }
 }

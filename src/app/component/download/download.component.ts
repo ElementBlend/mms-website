@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
 import { IModpackInfoResponse } from '../../interface/modpack-info-response';
 import { MetaControllerService } from '../../service/meta-controller.service';
@@ -19,7 +19,7 @@ import { LoginService } from '../../service/login.service';
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
-  private hasPermission: boolean = false;
+  private hasPermission: Observable<boolean> = new Observable<boolean>();
   private selectedVersion: number = 0;
   private selectedDownloadOption: string = "modpack";
   private selectedType: string = "full-installer";
@@ -40,12 +40,12 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.subscribeModpackInfo();
   }
 
-  protected getPermissionStatus(): boolean {
+  protected observePermissionStatus(): Observable<boolean> {
     return this.hasPermission;
   }
 
   private checkPermission(): void {
-    this.hasPermission = this.loginService.getAuthStatus();
+    this.hasPermission = this.loginService.observeAuthStatus();
   }
 
   private setupSEOTags(): void {

@@ -29,6 +29,20 @@ export class LoginService {
     }
   }
 
+  observeAuthStatus(): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      if (!this.getIdentityStatus()) {
+        this.loginFromServer().subscribe((status) => {
+          observer.next(status);
+          observer.complete();
+        });
+      } else {
+        observer.next(this.getAuthStatus());
+        observer.complete();
+      }
+    });
+  }
+
   getUsername(): string {
     return this.username;
   }

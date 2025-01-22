@@ -1,7 +1,8 @@
-import { LoginService } from './../../service/login.service';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { LoginService } from './../../service/login.service';
 import { IInstallationStep } from '../../interface/installation-step';
 import { InstallationGuideService } from '../../service/installation-guide.service';
 import { MetaControllerService } from '../../service/meta-controller.service';
@@ -18,7 +19,7 @@ import { PermissionDirective } from '../../directive/permission.directive';
   styleUrl: './installation.component.scss'
 })
 export class InstallationComponent implements OnInit {
-  private hasPermission: boolean = false;
+  private hasPermission: Observable<boolean> = new Observable<boolean>();
   private selectedOS: string = "Windows";
   private selectedMethod: string = "Full";
   private isHidden: boolean = true;
@@ -33,12 +34,12 @@ export class InstallationComponent implements OnInit {
     this.setupSEOTags();
   }
 
-  protected getPermissionStatus(): boolean {
+  protected observePermissionStatus(): Observable<boolean> {
     return this.hasPermission;
   }
 
   private checkPermission(): void {
-    this.hasPermission = this.loginService.getAuthStatus();
+    this.hasPermission = this.loginService.observeAuthStatus();
   }
 
   private setupSEOTags(): void {
