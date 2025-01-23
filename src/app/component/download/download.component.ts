@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
 import { IModpackInfoResponse } from '../../interface/modpack-info-response';
 import { MetaControllerService } from '../../service/meta-controller.service';
@@ -19,7 +19,7 @@ import { LoginService } from '../../service/login.service';
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {
-  private hasPermission: Observable<boolean> = new Observable<boolean>();
+  private isLoggedIn$: Observable<boolean> = new Observable<boolean>();
   private selectedVersion: number = 0;
   private selectedDownloadOption: string = "modpack";
   private selectedType: string = "full-installer";
@@ -41,11 +41,11 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   protected observePermissionStatus(): Observable<boolean> {
-    return this.hasPermission;
+    return this.isLoggedIn$;
   }
 
   private checkPermission(): void {
-    this.hasPermission = this.loginService.observeAuthStatus();
+    this.isLoggedIn$ = this.loginService.observeAuthStatus();
   }
 
   private setupSEOTags(): void {
@@ -58,22 +58,23 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   private subscribeModpackInfo(): void {
-    this.downloadService.isModpackInfoReceived()
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (received: boolean) => {
-          if (!received) {
-            this.downloadService.getModpackInfoFromServer()
-              .pipe(takeUntil(this.destroySubscription))
-              .subscribe({
-                next: (response: IModpackInfoResponse) => {
-                  this.downloadService.updateModpackInfo(response);
-                  // this.selectedVersion = this.getModpackVersions().length - 1;
-                }
-              });
-          }
+    this.downloadService.isModpackInfoReceived().pipe(
+      takeUntil(this.destroySubscription),
+      switchMap((received: boolean) => {
+        if (!received) {
+          return this.downloadService.getModpackInfoFromServer();
+        } else {
+          return of(null);
         }
-      });
+      })
+    ).subscribe({
+      next: (response: IModpackInfoResponse | null) => {
+        if (response) {
+          this.downloadService.updateModpackInfo(response);
+          // this.selectedVersion = this.getModpackVersions().length - 1;
+        }
+      }
+    });
   }
 
   protected getSelectedVersion(): number {

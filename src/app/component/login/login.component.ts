@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { LoginService } from '../../service/login.service';
 import { MetaControllerService } from '../../service/meta-controller.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -9,11 +10,23 @@ import { MetaControllerService } from '../../service/meta-controller.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  private isLoggedIn: boolean = false;
+  private destroySubscription: Subject<boolean> = new Subject<boolean>();
+
   constructor(private renderer: Renderer2, private elementRef: ElementRef, private metaControllerService: MetaControllerService, private loginService: LoginService) { }
 
   ngOnInit(): void {
     this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
+    this.checkPermission();
     this.setupSEOTags();
+  }
+
+  private checkPermission(): void {
+    this.loginService.observeAuthStatus()
+      .pipe(takeUntil(this.destroySubscription))
+      .subscribe((status) => {
+        this.isLoggedIn = status;
+      });
   }
 
   private setupSEOTags(): void {
@@ -25,7 +38,7 @@ export class LoginComponent implements OnInit {
     this.metaControllerService.updateAlternateUrl(link, "en");
   }
 
-  protected getLoginStatus(): boolean {
-    return this.loginService.getAuthStatus();
+  protected getPermStatus(): boolean {
+    return this.isLoggedIn;
   }
 }

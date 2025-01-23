@@ -19,7 +19,7 @@ import { PermissionDirective } from '../../directive/permission.directive';
   styleUrl: './installation.component.scss'
 })
 export class InstallationComponent implements OnInit {
-  private hasPermission: Observable<boolean> = new Observable<boolean>();
+  private isLoggedIn$: Observable<boolean> = new Observable<boolean>();
   private selectedOS: string = "Windows";
   private selectedMethod: string = "Full";
   private isHidden: boolean = true;
@@ -35,11 +35,11 @@ export class InstallationComponent implements OnInit {
   }
 
   protected observePermissionStatus(): Observable<boolean> {
-    return this.hasPermission;
+    return this.isLoggedIn$;
   }
 
   private checkPermission(): void {
-    this.hasPermission = this.loginService.observeAuthStatus();
+    this.isLoggedIn$ = this.loginService.observeAuthStatus();
   }
 
   private setupSEOTags(): void {

@@ -18,8 +18,6 @@ export class NavbarHeaderService {
     { name: 'Login', link: '/login' }
   ];
 
-  constructor() { }
-
   getNavbarItems(): INavbar[] {
     return this.navbarItems;
   }

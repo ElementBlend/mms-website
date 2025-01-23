@@ -13,6 +13,7 @@ import { INavbar } from '../../interface/navbar';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  private isLoggedIn: boolean = false;
   private isActive: boolean = false;
   private navbarItemsList: INavbar[] = [];
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
@@ -22,14 +23,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.navbarItemsList = this.navbarHeaderService.getNavbarItems();
-    this.autoLogin();
+    this.checkPermission();
     this.closeMobileNavbar();
   }
 
-  private autoLogin(): void {
-    if (!this.loginService.getIdentityStatus()) {
-      this.loginService.loginFromServer().pipe(takeUntil(this.destroySubscription)).subscribe();
-    }
+  private checkPermission(): void {
+    this.loginService.observeAuthStatus()
+      .pipe(takeUntil(this.destroySubscription))
+      .subscribe((status) => {
+        this.isLoggedIn = status;
+      });
   }
 
   private closeMobileNavbar(): void {
@@ -37,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroySubscription))
       .subscribe((event) => {
         if (event instanceof NavigationStart) {
-          if (this.navbarHeaderService.getNavbarStatus() === true) {
+          if (this.navbarHeaderService.getNavbarStatus()) {
             this.toggleMobileNavbar();
           }
         }
@@ -56,8 +59,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.loginService.getUsername();
   }
 
-  protected hasAuth(): boolean {
-    return this.loginService.getAuthStatus();
+  protected getPermStatus(): boolean {
+    return this.isLoggedIn;
   }
 
   protected getThemeStatus(): boolean {

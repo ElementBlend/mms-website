@@ -16,7 +16,7 @@ import { FooterComponent } from './component/footer/footer.component';
 export class AppComponent implements OnInit, OnDestroy {
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private renderer: Renderer2, private darkThemeService: DarkThemeService, @Inject(PLATFORM_ID) private platformId: Object, private elementRef: ElementRef) { }
+  constructor(private renderer: Renderer2, private elementRef: ElementRef, @Inject(PLATFORM_ID) private platformId: Object, private darkThemeService: DarkThemeService) { }
 
   ngOnInit(): void {
     this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");

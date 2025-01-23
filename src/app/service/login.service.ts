@@ -1,53 +1,53 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
-import { Observable, catchError, map, of, take } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, shareReplay, switchMap, take } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ILoginResponse } from '../interface/login-response';
-// import { ILoginTokenResponse } from './login-token-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+  private authStatusSubject: BehaviorSubject<boolean | null> = new BehaviorSubject<boolean | null>(null);
+  private authStatus$: Observable<boolean> = new Observable<boolean>();
   private backendDomain: string = environment.backendDomain;
   private backendPort: number = environment.backendPort;
   private username: string = "Guest";
-  private hasConfirmedIdentity: boolean = false;
 
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
-
-  getIdentityStatus(): boolean {
-    return this.hasConfirmedIdentity;
-  }
-
-  getAuthStatus(): boolean {
-    if (this.username !== "Guest" && this.username !== "") {
-      return true;
-    } else {
-      return false;
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
+    if (!isPlatformServer(this.platformId)) {
+      this.authStatus$ = this.authStatusSubject.pipe(
+        shareReplay(1),
+        switchMap((status) => {
+          if (status !== null) {
+            return of(status);
+          } else {
+            return this.getLoginStatusFromServer().pipe(
+              take(1),
+              map((data: ILoginResponse) => {
+                if (data.clientCN !== "Guest" && data.clientCN !== "") {
+                  this.username = data.clientCN;
+                  this.authStatusSubject.next(true);
+                  return true;
+                } else {
+                  this.authStatusSubject.next(false);
+                  return false;
+                }
+              }),
+              catchError((error) => {
+                console.error("There are some error occurs: " + error.message);
+                this.authStatusSubject.next(false);
+                return of(false);
+              })
+            );
+          }
+        })
+      );
     }
   }
 
-  observeAuthStatus(): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
-      if (!this.getIdentityStatus()) {
-        this.loginFromServer().subscribe((status) => {
-          observer.next(status);
-          observer.complete();
-        });
-      } else {
-        observer.next(this.getAuthStatus());
-        observer.complete();
-      }
-    });
-  }
-
-  getUsername(): string {
-    return this.username;
-  }
-
-  private getServerLoginUrl(): Observable<ILoginResponse> {
+  private getLoginStatusFromServer(): Observable<ILoginResponse> {
     let loginUrl: string = "";
     if (isPlatformServer(this.platformId)) {
       loginUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/auth/login`;
@@ -57,49 +57,30 @@ export class LoginService {
     return this.http.get<ILoginResponse>(loginUrl);
   }
 
-  loginFromServer(): Observable<boolean> {
-    return this.getServerLoginUrl().pipe(
-      take(1),
-      map((data: ILoginResponse) => {
-        this.hasConfirmedIdentity = true;
-        if (data.clientCN !== "Guest" && data.clientCN !== "") {
-          this.username = data.clientCN;
-          return true;
-        } else {
-          return false;
-        }
-      }),
-      catchError((error) => {
-        console.error("There are some error occurs: " + error.message);
-        return of(false);
-      })
-    );
+  observeAuthStatus(): Observable<boolean> {
+    return this.authStatus$;
   }
 
-  // private getServerCheckTokenUrl(): Observable<ILoginTokenResponse> {
-  //   let authUrl: string = "";
-  //   if (isPlatformServer(this.platformId)) {
-  //     authUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/auth/token`;
-  //   } else {
-  //     authUrl = "/api/v1/auth/token";
-  //   }
-  //   return this.http.get<ILoginTokenResponse>(authUrl, {});
-  // }
+  getUsername(): string {
+    return this.username;
+  }
 
-  // loginByTokenFromServer(): Observable<boolean> {
-  //   if (this.username !== "Guest") {
-  //     return this.getServerCheckTokenUrl().pipe(
-  //       take(1),
-  //       map(() => {
+  // loginFromServer(): Observable<boolean> {
+  //   return this.getLoginStatusFromServer().pipe(
+  //     take(1),
+  //     shareReplay(1),
+  //     map((data: ILoginResponse) => {
+  //       if (data.clientCN !== "Guest" && data.clientCN !== "") {
+  //         this.username = data.clientCN;
   //         return true;
-  //       }),
-  //       catchError((error) => {
-  //         console.error("There are some error occurs: " + error.message);
-  //         return of(false);
-  //       })
-  //     );
-  //   } else {
-  //     return of(false);
-  //   }
+  //       } else {
+  //         return false;
+  //       }
+  //     }),
+  //     catchError((error) => {
+  //       console.error("There are some error occurs: " + error.message);
+  //       return of(false);
+  //     })
+  //   );
   // }
 }

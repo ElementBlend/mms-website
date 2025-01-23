@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class DarkThemeService {
   private isDarkThemeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private isDarkTheme: Observable<boolean> = this.isDarkThemeSubject.asObservable();
+  private isDarkTheme$: Observable<boolean> = this.isDarkThemeSubject.asObservable();
 
   constructor() {
     const storedPreference = typeof localStorage !== 'undefined' ? localStorage.getItem('isDarkTheme') : null;
@@ -16,7 +16,7 @@ export class DarkThemeService {
   }
 
   getisDarkTheme(): Observable<boolean> {
-    return this.isDarkTheme;
+    return this.isDarkTheme$;
   }
 
   toggleDarkTheme(): void {

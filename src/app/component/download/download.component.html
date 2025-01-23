@@ -79,10 +79,10 @@
           </div>
         </div>
 
-        @if (getIsDownloadButtonClicked() === true) {
+        @if (getIsDownloadButtonClicked()) {
         <div class="mt-5">
           <p>The download should start automatically soon.</p>
-          @if (hasHashValue() === true) {
+          @if (hasHashValue()) {
           <p>SHA256: {{ getHashValue() }}</p>
           }
         </div>

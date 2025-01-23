@@ -19,8 +19,6 @@ export class InstallationGuideService {
     { description: 'Follow the instructions from the installer and select the folder (path) you installed our modpack before.', remark: 'You must select the previously installed folder (path) since the installer may not only add some new mods but also remove some old mods and edit some config files! So please DO NOT create an empty folder as the path!' }
   ];
 
-  constructor() { }
-
   getInstallationSteps(os: string, method: string): IInstallationStep[] {
     if (os === 'windows') {
       if (method === 'full') {
