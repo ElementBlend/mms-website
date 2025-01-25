@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
-import { IModpackInfoResponse } from '../../interface/modpack-info-response';
 import { MetaControllerService } from '../../service/meta-controller.service';
 import { PermissionDirective } from '../../directive/permission.directive';
 import { LoginService } from '../../service/login.service';
@@ -20,14 +19,13 @@ import { LoginService } from '../../service/login.service';
 })
 export class DownloadComponent implements OnInit, OnDestroy {
   private isLoggedIn$: Observable<boolean> = new Observable<boolean>();
-  private selectedVersion: number = 0;
+  private selectedIndex: number = 0;
   private selectedDownloadOption: string = "modpack";
   private selectedType: string = "full-installer";
   private selectedOS: string = "windows";
-  private isDownloadButtonClicked: boolean = false;
+  private userDownloading: boolean = false;
   private hashValue: string = "";
   private isDownloadEnabled: boolean = false;
-  private alreadyReceivedInfo: boolean = false;
   private downloadTimeout: NodeJS.Timeout = setTimeout(() => { }, 0);
   private destroySubscription: Subject<boolean> = new Subject<boolean>();
 
@@ -36,8 +34,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.renderer.removeAttribute(this.elementRef.nativeElement, "ng-version");
     this.checkPermission();
+    this.updateInitialIndex();
     this.setupSEOTags();
-    this.subscribeModpackInfo();
   }
 
   protected observePermissionStatus(): Observable<boolean> {
@@ -46,6 +44,22 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   private checkPermission(): void {
     this.isLoggedIn$ = this.loginService.observeAuthStatus();
+  }
+
+  private updateInitialIndex(): void {
+    this.downloadService.getModpackStatus().pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (received: boolean | 'error') => {
+        if (received === true) {
+          // this.selectedIndex = this.getModpackVersions().length - 1;
+          this.selectedIndex = 0; // Use it only when the current modpack version is negative
+          this.isDownloadEnabled = true;
+        } else if (received === 'error') {
+          console.error("Failed to get modpack status from the server.");
+        }
+      }
+    });
   }
 
   private setupSEOTags(): void {
@@ -57,28 +71,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.metaControllerService.updateAlternateUrl(link, "en");
   }
 
-  private subscribeModpackInfo(): void {
-    this.downloadService.isModpackInfoReceived().pipe(
-      takeUntil(this.destroySubscription),
-      switchMap((received: boolean) => {
-        if (!received) {
-          return this.downloadService.getModpackInfoFromServer();
-        } else {
-          return of(null);
-        }
-      })
-    ).subscribe({
-      next: (response: IModpackInfoResponse | null) => {
-        if (response) {
-          this.downloadService.updateModpackInfo(response);
-          // this.selectedVersion = this.getModpackVersions().length - 1;
-        }
-      }
-    });
-  }
-
-  protected getSelectedVersion(): number {
-    return this.selectedVersion;
+  protected getSelectedIndex(): number {
+    return this.selectedIndex;
   }
 
   protected getModpackVersions(): number[] {
@@ -97,8 +91,36 @@ export class DownloadComponent implements OnInit, OnDestroy {
     return this.selectedOS;
   }
 
+  protected getModpackName(): string {
+    return this.downloadService.getModpackName(this.selectedIndex);
+  }
+
+  protected getModpackImage(): string {
+    return this.downloadService.getModpackImage(this.selectedIndex);
+  }
+
+  protected getModpackImageAlt(): string {
+    return this.downloadService.getModpackImageAlt(this.selectedIndex);
+  }
+
+  protected isUserDownloading(): boolean {
+    return this.userDownloading;
+  }
+
+  protected getHashValue(): string {
+    return this.hashValue;
+  }
+
+  protected hasHashValue(): boolean {
+    return this.hashValue !== "";
+  }
+
+  protected isDownloadReady(): boolean {
+    return this.isDownloadEnabled;
+  }
+
   protected onSelectionChanged(event: Event): void {
-    this.isDownloadButtonClicked = false;
+    this.userDownloading = false;
     this.hashValue = "";
     if (!event.target) {
       throw new Error("Event target not found");
@@ -109,7 +131,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     const value = target.value;
     switch (id) {
       case "downloadVersion":
-        this.selectedVersion = parseInt(value, 10);
+        this.selectedIndex = parseInt(value, 10);
         break;
       case "downloadOption":
         this.selectedDownloadOption = value;
@@ -132,61 +154,18 @@ export class DownloadComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected getModpackName(): string {
-    return this.downloadService.getModpackName(this.selectedVersion);
-  }
-
-  protected getModpackImage(): string {
-    return this.downloadService.getModpackImage(this.selectedVersion);
-  }
-
-  protected getModpackImageAlt(): string {
-    return this.downloadService.getModpackImageAlt(this.selectedVersion);
-  }
-
-  protected getIsDownloadButtonClicked(): boolean {
-    return this.isDownloadButtonClicked;
-  }
-
-  protected getHashValue(): string {
-    return this.hashValue;
-  }
-
-  protected hasHashValue(): boolean {
-    return this.hashValue !== "";
-  }
-
-  protected checkisDownloadEnabled(): boolean {
-    if (!this.alreadyReceivedInfo) {
-      this.downloadService.isModpackInfoReceived()
-        .pipe(takeUntil(this.destroySubscription))
-        .subscribe({
-          next: (received: boolean) => {
-            if (!received) {
-              this.isDownloadEnabled = false;
-              this.alreadyReceivedInfo = false;
-            } else {
-              this.isDownloadEnabled = true;
-              this.alreadyReceivedInfo = true;
-            }
-          }
-        });
-    }
-    return this.isDownloadEnabled;
-  }
-
   protected onDownloadButtonClicked(): void {
     if (this.selectedDownloadOption !== "modpack") {
       throw new Error("World download is not implemented yet.");
     } else {
-      this.isDownloadButtonClicked = true;
-      this.downloadModpack(this.selectedVersion, this.selectedDownloadOption, this.selectedType, this.selectedOS);
+      this.userDownloading = true;
+      this.downloadModpack(this.selectedIndex, this.selectedDownloadOption, this.selectedType, this.selectedOS);
     }
-    this.setHashValue(this.selectedVersion, this.selectedDownloadOption, this.selectedType, this.selectedOS);
+    this.setHashValue(this.selectedIndex, this.selectedDownloadOption, this.selectedType, this.selectedOS);
   }
 
-  private downloadModpack(version: number, option: string, type: string, os: string): void {
-    const url = this.downloadService.getDownloadModpackUrlFromServer(version, option, type, os);
+  private downloadModpack(index: number, option: string, type: string, os: string): void {
+    const url = this.downloadService.getDownloadModpackUrlFromServer(index, option, type, os);
     const link = this.renderer.createElement('a');
     this.renderer.setAttribute(link, 'href', url);
     this.renderer.setAttribute(link, 'target', '_blank');
@@ -201,14 +180,14 @@ export class DownloadComponent implements OnInit, OnDestroy {
     }, 5000);
   }
 
-  private setHashValue(version: number, option: string, type: string, os: string): void {
-    this.downloadService.getModpackHashValueFromServer(version, option, type, os)
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (hashValue: string) => {
-          this.hashValue = hashValue;
-        }
-      });
+  private setHashValue(index: number, option: string, type: string, os: string): void {
+    this.downloadService.getModpackHashValueFromServer(index, option, type, os).pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (hashValue: string) => {
+        this.hashValue = hashValue;
+      }
+    });
   }
 
   ngOnDestroy(): void {

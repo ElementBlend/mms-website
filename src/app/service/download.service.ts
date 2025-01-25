@@ -1,7 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, retry, shareReplay, switchMap, take } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IModpackInfoResponse } from '../interface/modpack-info-response';
 
@@ -9,51 +9,49 @@ import { IModpackInfoResponse } from '../interface/modpack-info-response';
   providedIn: 'root'
 })
 export class DownloadService {
+  private modpackStatusSubject: BehaviorSubject<boolean | 'error'> = new BehaviorSubject<boolean | 'error'>(false);
+  private modpackStatus$: Observable<boolean | 'error'> = this.modpackStatusSubject.asObservable();
   private backendDomain: string = environment.backendDomain;
   private backendPort: number = environment.backendPort;
   private modpackVersions: number[] = [];
   private modpackNames: string[] = [];
 
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
-
-  getModpackVersions(): number[] {
-    return this.modpackVersions;
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
+    this.autoReceiveModpackInfo();
   }
 
-  getModpackName(version: number): string {
-    return this.modpackNames[version];
+  private autoReceiveModpackInfo(): void {
+    this.modpackStatus$ = this.modpackStatusSubject.pipe(
+      shareReplay(1),
+      switchMap((received) => {
+        if (received === true) {
+          return of(true);
+        } else if (received === 'error') {
+          return of<'error'>('error');
+        } else {
+          return this.getModpackInfoFromServer().pipe(
+            take(1),
+            map((response: IModpackInfoResponse) => {
+              this.updateModpackInfo(response);
+              this.modpackStatusSubject.next(true);
+              return true;
+            }),
+            catchError((error) => {
+              console.error("There are some error occurs: " + error.message);
+              this.modpackStatusSubject.next('error');
+              return of<'error'>('error');
+            }),
+            retry({
+              count: 3,
+              delay: 5000
+            })
+          );
+        }
+      })
+    );
   }
 
-  getModpackImage(version: number): string {
-    const truncVersion = this.truncModpackVersion(version);
-    return `/assets/images/modpacks/v${truncVersion}.png`;
-  }
-
-  getModpackImageAlt(version: number): string {
-    const truncVersion = this.truncModpackVersion(version);
-    return `Image of modpack v${truncVersion}`;
-  }
-
-  private truncModpackVersion(version: number): number {
-    if (this.modpackVersions.length === 0) {
-      return 18;
-    }
-    return Math.trunc(this.modpackVersions[version]);
-  }
-
-  isModpackInfoReceived(): Observable<boolean> {
-    return new Observable<boolean>(observer => {
-      if (this.modpackVersions.length === 0 || this.modpackNames.length === 0) {
-        observer.next(false);
-        observer.complete();
-      } else {
-        observer.next(true);
-        observer.complete();
-      }
-    });
-  }
-
-  getModpackInfoFromServer(): Observable<IModpackInfoResponse> {
+  private getModpackInfoFromServer(): Observable<IModpackInfoResponse> {
     let modpackNameUrl: string = "";
     if (isPlatformServer(this.platformId)) {
       modpackNameUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/info`;
@@ -63,13 +61,42 @@ export class DownloadService {
     return this.http.get<IModpackInfoResponse>(modpackNameUrl);
   }
 
-  updateModpackInfo(response: IModpackInfoResponse): void {
+  private updateModpackInfo(response: IModpackInfoResponse): void {
     this.modpackVersions = response.versions;
     this.modpackNames = response.names;
   }
 
-  getDownloadModpackUrlFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): string {
-    const downloadVersion = this.truncModpackVersion(selectedVersion);
+  getModpackStatus(): Observable<boolean | 'error'> {
+    return this.modpackStatus$;
+  }
+
+  getModpackVersions(): number[] {
+    return this.modpackVersions;
+  }
+
+  getModpackName(index: number): string {
+    return this.modpackNames[index];
+  }
+
+  getModpackImage(index: number): string {
+    const truncVersion = this.truncModpackVersion(index);
+    return `/assets/images/modpacks/v${truncVersion}.png`;
+  }
+
+  getModpackImageAlt(index: number): string {
+    const truncVersion = this.truncModpackVersion(index);
+    return `Image of modpack v${truncVersion}`;
+  }
+
+  private truncModpackVersion(index: number): number {
+    if (this.modpackVersions.length === 0) { // Prevent initial 404 data
+      return 18;
+    }
+    return Math.trunc(this.modpackVersions[index]);
+  }
+
+  getDownloadModpackUrlFromServer(selectedIndex: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): string {
+    const downloadVersion = this.truncModpackVersion(selectedIndex);
     let downloadUrl: string = "";
     if (isPlatformServer(this.platformId)) {
       downloadUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/modpacks/${downloadVersion}/file?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
@@ -79,8 +106,8 @@ export class DownloadService {
     return downloadUrl;
   }
 
-  getModpackHashValueFromServer(selectedVersion: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<string> {
-    const downloadVersion = this.truncModpackVersion(selectedVersion);
+  getModpackHashValueFromServer(selectedIndex: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<string> {
+    const downloadVersion = this.truncModpackVersion(selectedIndex);
     let modpackHashUrl: string = "";
     const webApiKey = environment.webApiKey;
     const headers = new HttpHeaders().set("x-web-api-key", webApiKey);

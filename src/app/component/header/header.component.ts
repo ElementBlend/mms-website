@@ -28,23 +28,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private checkPermission(): void {
-    this.loginService.observeAuthStatus()
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe((status) => {
+    this.loginService.observeAuthStatus().pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (status: boolean) => {
         this.isLoggedIn = status;
-      });
+      }
+    });
   }
 
   private closeMobileNavbar(): void {
-    this.router.events
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe((event) => {
+    this.router.events.pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (event) => {
         if (event instanceof NavigationStart) {
           if (this.navbarHeaderService.getNavbarStatus()) {
             this.toggleMobileNavbar();
           }
         }
-      });
+      }
+    });
   }
 
   protected getIsActive(): boolean {

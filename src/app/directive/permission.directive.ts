@@ -16,16 +16,18 @@ export class PermissionDirective implements OnInit, OnDestroy {
   }
 
   private checkPermission(): void {
-    this.requiredPermission$
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe((permission: boolean) => {
+    this.requiredPermission$.pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (permission: boolean) => {
         this.viewContaiiner.clear();
         if (permission) {
           this.viewContaiiner.createEmbeddedView(this.templateRef);
         } else {
           this.viewContaiiner.createComponent(ForbiddenComponent);
         }
-      });
+      }
+    });
   }
 
   ngOnDestroy(): void {

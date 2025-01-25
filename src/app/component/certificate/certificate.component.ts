@@ -86,32 +86,32 @@ export class CertificateComponent implements OnInit, OnDestroy {
   }
 
   private downloadCertificate(type: string): void {
-    this.certificateService.getCertificateUrlFromServer(type)
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (response: HttpResponse<Blob>) => {
-          const contentDisposition = response.headers.get('Content-Disposition');
-          let fileName: string = `cert-installer-${type}.7z`;
-          if (contentDisposition) {
-            const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-            const matches = filenameRegex.exec(contentDisposition);
-            if (matches && matches[1]) {
-              fileName = matches[1].replace(/['"]/g, '');
-            }
+    this.certificateService.getCertificateUrlFromServer(type).pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (response: HttpResponse<Blob>) => {
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let fileName: string = `cert-installer-${type}.7z`;
+        if (contentDisposition) {
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches && matches[1]) {
+            fileName = matches[1].replace(/['"]/g, '');
           }
-
-          const url = window.URL.createObjectURL(response.body as Blob);
-          const link = this.renderer.createElement('a');
-          this.renderer.setAttribute(link, 'href', url);
-          this.renderer.setAttribute(link, 'target', '_blank');
-          this.renderer.setAttribute(link, 'rel', 'noreferrer noopener');
-          this.renderer.setAttribute(link, 'download', fileName);
-          this.renderer.appendChild(document.body, link);
-          link.click();
-          this.renderer.removeChild(document.body, link);
-          window.URL.revokeObjectURL(url);
         }
-      });
+
+        const url = window.URL.createObjectURL(response.body as Blob);
+        const link = this.renderer.createElement('a');
+        this.renderer.setAttribute(link, 'href', url);
+        this.renderer.setAttribute(link, 'target', '_blank');
+        this.renderer.setAttribute(link, 'rel', 'noreferrer noopener');
+        this.renderer.setAttribute(link, 'download', fileName);
+        this.renderer.appendChild(document.body, link);
+        link.click();
+        this.renderer.removeChild(document.body, link);
+        window.URL.revokeObjectURL(url);
+      }
+    });
     this.isDownloadEnabled = false;
     this.downloadTimeout = setTimeout(() => {
       this.isDownloadEnabled = true;
@@ -119,13 +119,13 @@ export class CertificateComponent implements OnInit, OnDestroy {
   }
 
   private setHashValue(selectedOS: string): void {
-    this.certificateService.getCertificateHashValueFromServer(selectedOS)
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe({
-        next: (hashValue: string) => {
-          this.hashValue = hashValue;
-        }
-      });
+    this.certificateService.getCertificateHashValueFromServer(selectedOS).pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (hashValue: string) => {
+        this.hashValue = hashValue;
+      }
+    });
   }
 
   ngOnDestroy(): void {

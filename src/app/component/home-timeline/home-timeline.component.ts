@@ -23,13 +23,13 @@ export class HomeTimelineComponent implements OnInit, OnDestroy {
 
   private fetchTimelineData(): void {
     if (this.getTimelineData().length === 0) {
-      this.timelineService.getTimelineFromServer()
-        .pipe(takeUntil(this.destroySubscription))
-        .subscribe({
-          next: (data: ITimelineResponse) => {
-            this.timelineService.updateTimelineData(data.data);
-          }
-        });
+      this.timelineService.getTimelineFromServer().pipe(
+        takeUntil(this.destroySubscription)
+      ).subscribe({
+        next: (data: ITimelineResponse) => {
+          this.timelineService.updateTimelineData(data.data);
+        }
+      });
     }
   }
 

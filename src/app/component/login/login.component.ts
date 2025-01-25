@@ -22,11 +22,13 @@ export class LoginComponent implements OnInit {
   }
 
   private checkPermission(): void {
-    this.loginService.observeAuthStatus()
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe((status) => {
+    this.loginService.observeAuthStatus().pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe({
+      next: (status: boolean) => {
         this.isLoggedIn = status;
-      });
+      }
+    });
   }
 
   private setupSEOTags(): void {

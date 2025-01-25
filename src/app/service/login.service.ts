@@ -17,34 +17,38 @@ export class LoginService {
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
     if (!isPlatformServer(this.platformId)) {
-      this.authStatus$ = this.authStatusSubject.pipe(
-        shareReplay(1),
-        switchMap((status) => {
-          if (status !== null) {
-            return of(status);
-          } else {
-            return this.getLoginStatusFromServer().pipe(
-              take(1),
-              map((data: ILoginResponse) => {
-                if (data.clientCN !== "Guest" && data.clientCN !== "") {
-                  this.username = data.clientCN;
-                  this.authStatusSubject.next(true);
-                  return true;
-                } else {
-                  this.authStatusSubject.next(false);
-                  return false;
-                }
-              }),
-              catchError((error) => {
-                console.error("There are some error occurs: " + error.message);
-                this.authStatusSubject.next(false);
-                return of(false);
-              })
-            );
-          }
-        })
-      );
+      this.autoLoginFromServer();
     }
+  }
+
+  private autoLoginFromServer(): void {
+    this.authStatus$ = this.authStatusSubject.pipe(
+      shareReplay(1),
+      switchMap((status) => {
+        if (status !== null) {
+          return of(status);
+        } else {
+          return this.getLoginStatusFromServer().pipe(
+            take(1),
+            map((data: ILoginResponse) => {
+              if (data.clientCN !== "Guest" && data.clientCN !== "") {
+                this.username = data.clientCN;
+                this.authStatusSubject.next(true);
+                return true;
+              } else {
+                this.authStatusSubject.next(false);
+                return false;
+              }
+            }),
+            catchError((error) => {
+              console.error("There are some error occurs: " + error.message);
+              this.authStatusSubject.next(false);
+              return of(false);
+            })
+          );
+        }
+      })
+    );
   }
 
   private getLoginStatusFromServer(): Observable<ILoginResponse> {

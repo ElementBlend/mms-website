@@ -23,7 +23,7 @@
           <label for="downloadVersion" class="label">Select Modpack Version</label>
           <div class="control">
             <div class="select">
-              <select id="downloadVersion" [ngModel]="getSelectedVersion()" (change)="onSelectionChanged($event)">
+              <select id="downloadVersion" [ngModel]="getSelectedIndex()" (change)="onSelectionChanged($event)">
                 @for (version of getModpackVersions(); track version; let idx = $index) {
                 <option [value]=idx>Version {{version}}</option>
                 }
@@ -74,12 +74,12 @@
         <div class="field is-grouped mt-5">
           <div class="control">
             <button
-              [ngClass]="{'button': true, 'is-primary': checkisDownloadEnabled(), 'is-danger': !checkisDownloadEnabled()}"
-              [disabled]="!checkisDownloadEnabled()" (click)="onDownloadButtonClicked()">Download</button>
+              [ngClass]="{'button': true, 'is-primary': isDownloadReady(), 'is-danger': !isDownloadReady()}"
+              [disabled]="!isDownloadReady()" (click)="onDownloadButtonClicked()">Download</button>
           </div>
         </div>
 
-        @if (getIsDownloadButtonClicked()) {
+        @if (isUserDownloading()) {
         <div class="mt-5">
           <p>The download should start automatically soon.</p>
           @if (hasHashValue()) {

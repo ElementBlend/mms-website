@@ -28,15 +28,15 @@ export class AppComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.darkThemeService.getisDarkTheme()
-      .pipe(takeUntil(this.destroySubscription))
-      .subscribe(isDark => {
-        if (isDark) {
-          this.renderer.setAttribute(document.documentElement, "data-theme", "dark");
-        } else {
-          this.renderer.setAttribute(document.documentElement, "data-theme", "light");
-        }
-      });
+    this.darkThemeService.getisDarkTheme().pipe(
+      takeUntil(this.destroySubscription)
+    ).subscribe(isDark => {
+      if (isDark) {
+        this.renderer.setAttribute(document.documentElement, "data-theme", "dark");
+      } else {
+        this.renderer.setAttribute(document.documentElement, "data-theme", "light");
+      }
+    });
   }
 
   ngOnDestroy(): void {
