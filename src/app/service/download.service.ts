@@ -90,7 +90,7 @@ export class DownloadService {
 
   private truncModpackVersion(index: number): number {
     if (this.modpackVersions.length === 0) { // Prevent initial 404 data
-      return 18;
+      return 19;
     }
     return Math.trunc(this.modpackVersions[index]);
   }
