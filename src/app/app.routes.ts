@@ -40,6 +40,16 @@ export const routes: Routes = [
     loadComponent: () => import('./component/application/application.component').then(m => m.ApplicationComponent)
   },
   {
+    path: 'privacy-policy',
+    title: 'Privacy Policy - MMS - Elementbland',
+    loadComponent: () => import('./component/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+  },
+  {
+    path: 'cookie-policy',
+    title: 'Cookie Policy - MMS - Elementbland',
+    loadComponent: () => import('./component/cookie-policy/cookie-policy.component').then(m => m.CookiePolicyComponent)
+  },
+  {
     path: '404',
     title: 'Page Not Found - MMS - Elementbland',
     loadComponent: () => import('./component/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent)
