@@ -6,6 +6,7 @@ import { DownloadService } from '../../service/download.service';
 import { MetaControllerService } from '../../service/meta-controller.service';
 import { PermissionDirective } from '../../directive/permission.directive';
 import { LoginService } from '../../service/login.service';
+import { IHashResponse } from '../../interface/hash-response';
 
 @Component({
   selector: 'app-download',
@@ -184,8 +185,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.downloadService.getModpackHashValueFromServer(index, option, type, os).pipe(
       takeUntil(this.destroySubscription)
     ).subscribe({
-      next: (hashValue: string) => {
-        this.hashValue = hashValue;
+      next: (response: IHashResponse) => {
+        this.hashValue = response.hash;
       }
     });
   }

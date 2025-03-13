@@ -3,6 +3,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { IHashResponse } from '../interface/hash-response';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +24,13 @@ export class CertificateService {
     return this.http.get(certificatekUrl, { observe: 'response', responseType: 'blob' });
   }
 
-  getCertificateHashValueFromServer(type: string): Observable<string> {
+  getCertificateHashValueFromServer(type: string): Observable<IHashResponse> {
     let certificateHashUrl: string = "";
     if (isPlatformServer(this.platformId)) {
       certificateHashUrl = `https://${this.backendDomain}:${this.backendPort}/api/v1/app/cert-installer/hash?os=${type}`;
     } else {
       certificateHashUrl = `/api/v1/app/cert-installer/hash?os=${type}`;
     }
-    return this.http.get(certificateHashUrl, { responseType: 'text' });
+    return this.http.get<IHashResponse>(certificateHashUrl);
   }
 }

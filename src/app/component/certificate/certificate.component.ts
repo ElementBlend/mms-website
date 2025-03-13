@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { CertificateService } from '../../service/certificate.service';
 import { MetaControllerService } from './../../service/meta-controller.service';
+import { IHashResponse } from '../../interface/hash-response';
 
 @Component({
   selector: 'app-certificate',
@@ -122,8 +123,8 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.certificateService.getCertificateHashValueFromServer(selectedOS).pipe(
       takeUntil(this.destroySubscription)
     ).subscribe({
-      next: (hashValue: string) => {
-        this.hashValue = hashValue;
+      next: (response: IHashResponse) => {
+        this.hashValue = response.hash;
       }
     });
   }

@@ -4,6 +4,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, retry, shareReplay, switchMap, take } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IModpackInfoResponse } from '../interface/modpack-info-response';
+import { IHashResponse } from '../interface/hash-response';
 
 @Injectable({
   providedIn: 'root'
@@ -106,7 +107,7 @@ export class DownloadService {
     return downloadUrl;
   }
 
-  getModpackHashValueFromServer(selectedIndex: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<string> {
+  getModpackHashValueFromServer(selectedIndex: number, selectedDownloadOption: string, selectedType: string, selectedOS: string): Observable<IHashResponse> {
     const downloadVersion = this.truncModpackVersion(selectedIndex);
     let modpackHashUrl: string = "";
     if (isPlatformServer(this.platformId)) {
@@ -114,6 +115,6 @@ export class DownloadService {
     } else {
       modpackHashUrl = `api/v1/modpacks/${downloadVersion}/file/hash?download-option=${selectedDownloadOption}&type=${selectedType}&os=${selectedOS}`;
     }
-    return this.http.get(modpackHashUrl, { responseType: "text" });
+    return this.http.get<IHashResponse>(modpackHashUrl);
   }
 }
