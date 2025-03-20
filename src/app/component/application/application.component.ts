@@ -23,6 +23,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/application/";
+    this.metaControllerService.setMetaTag("name", "robots", "");
     this.metaControllerService.setMetaTag("name", "description", "This is the page where users can apply for accessing the ElementBlend MMS modpack server. You can fill out the application form here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Application");
     this.metaControllerService.setMetaTag("property", "og:url", link);

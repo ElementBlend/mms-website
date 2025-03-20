@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/login/";
+    this.metaControllerService.setMetaTag("name", "robots", "");
     this.metaControllerService.setMetaTag("name", "description", "This is the login page for the ElementBlend MMS website. You can check the login status here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Login");
     this.metaControllerService.setMetaTag("property", "og:url", link);

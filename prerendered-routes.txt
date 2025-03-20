@@ -6,3 +6,5 @@
 /download
 /installation
 /application
+/privacy-policy
+/cookie-policy

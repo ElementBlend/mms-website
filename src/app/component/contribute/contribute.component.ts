@@ -24,6 +24,7 @@ export class ContributeComponent implements OnInit {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/contribute/";
+    this.metaControllerService.setMetaTag("name", "robots", "");
     this.metaControllerService.setMetaTag("name", "description", "This is the contributors page for the ElementBlend MMS website. You can check the contributors here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Contributors");
     this.metaControllerService.setMetaTag("property", "og:url", link);

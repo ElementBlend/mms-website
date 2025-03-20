@@ -18,6 +18,7 @@ export class CookiePolicyComponent implements OnInit {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/cookie-policy/";
+    this.metaControllerService.setMetaTag("name", "robots", "");
     this.metaControllerService.setMetaTag("name", "description", "This is the cookie policy page for the ElementBlend MMS website. You can check the cookie policy here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Cookie Policy");
     this.metaControllerService.setMetaTag("property", "og:url", link);

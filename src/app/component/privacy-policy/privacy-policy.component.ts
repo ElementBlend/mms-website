@@ -18,6 +18,7 @@ export class PrivacyPolicyComponent implements OnInit {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/privacy-policy/";
+    this.metaControllerService.setMetaTag("name", "robots", "");
     this.metaControllerService.setMetaTag("name", "description", "This is the privacy policy page for the ElementBlend MMS website. You can check the privacy policy here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Privacy Policy");
     this.metaControllerService.setMetaTag("property", "og:url", link);

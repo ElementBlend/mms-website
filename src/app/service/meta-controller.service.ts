@@ -13,6 +13,11 @@ export class MetaControllerService {
   }
 
   setMetaTag(tagType: 'name' | 'property', tagName: string, tagContent: string): void {
+    if (tagContent == null || tagContent === '') {
+      this.meta.removeTag(`${tagType}='${tagName}'`);
+      return;
+    }
+
     if (this.meta.getTag(`${tagType}='${tagName}'`) == null) {
       this.meta.addTag({ [tagType]: tagName, content: tagContent });
     } else {
