@@ -1,5 +1,4 @@
-User-Agent: *
-Disallow: /download/
-Disallow: /download$
-Disallow: /installation/
-Disallow: /installation$
+User-agent: *
+Allow: /
+Crawl-delay: 2
+Sitemap: https://mod.elementblend.com/sitemap.xml

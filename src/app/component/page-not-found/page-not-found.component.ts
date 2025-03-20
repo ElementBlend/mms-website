@@ -18,6 +18,7 @@ export class PageNotFoundComponent implements OnInit {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/404/";
+    this.metaControllerService.setMetaTag("name", "robots", "noindex, nofollow");
     this.metaControllerService.setMetaTag("name", "description", "The page you are looking for does not exist. Please check the URL and try again.");
     this.metaControllerService.setMetaTag("property", "og:title", "404 Not Found");
     this.metaControllerService.setMetaTag("property", "og:url", link);

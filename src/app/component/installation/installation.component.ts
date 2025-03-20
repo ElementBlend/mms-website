@@ -44,6 +44,7 @@ export class InstallationComponent implements OnInit {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/installation/";
+    this.metaControllerService.setMetaTag("name", "robots", "noindex, nofollow");
     this.metaControllerService.setMetaTag("name", "description", "This is the installation guide for the ElementBlend MMS modpack. You can find the installation steps here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Installation Guide");
     this.metaControllerService.setMetaTag("property", "og:url", link);

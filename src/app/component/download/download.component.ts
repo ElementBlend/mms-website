@@ -65,6 +65,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   private setupSEOTags(): void {
     const link: string = "https://mod.elementblend.com/download/";
+    this.metaControllerService.setMetaTag("name", "robots", "noindex, nofollow");
     this.metaControllerService.setMetaTag("name", "description", "This is the download page for the ElementBlend MMS modpack. You can download the modpack here.");
     this.metaControllerService.setMetaTag("property", "og:title", "Download");
     this.metaControllerService.setMetaTag("property", "og:url", link);
