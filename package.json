@@ -1,6 +1,6 @@
 {
   "name": "@samlam140330/mms-website",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "For semi-private discord Minecraft Modding Survival server website use.",
   "homepage": "https://github.com/ElementBlend/mms-website#readme",
   "bugs": {
@@ -23,16 +23,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^19.2.3",
-    "@angular/common": "^19.2.3",
-    "@angular/compiler": "^19.2.3",
-    "@angular/core": "^19.2.3",
-    "@angular/forms": "^19.2.3",
-    "@angular/platform-browser": "^19.2.3",
-    "@angular/platform-browser-dynamic": "^19.2.3",
-    "@angular/platform-server": "^19.2.3",
-    "@angular/router": "^19.2.3",
-    "@angular/ssr": "^19.2.4",
+    "@angular/animations": "^19.2.5",
+    "@angular/common": "^19.2.5",
+    "@angular/compiler": "^19.2.5",
+    "@angular/core": "^19.2.5",
+    "@angular/forms": "^19.2.5",
+    "@angular/platform-browser": "^19.2.5",
+    "@angular/platform-browser-dynamic": "^19.2.5",
+    "@angular/platform-server": "^19.2.5",
+    "@angular/router": "^19.2.5",
+    "@angular/ssr": "^19.2.6",
     "@samlam140330/bulma-switch": "^1.0.2",
     "@samlam140330/bulma-timeline": "^1.0.3",
     "bulma": "^1.0.3",
@@ -43,18 +43,18 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.2.4",
-    "@angular/cli": "^19.2.4",
-    "@angular/compiler-cli": "^19.2.3",
+    "@angular-devkit/build-angular": "^19.2.6",
+    "@angular/cli": "^19.2.6",
+    "@angular/compiler-cli": "^19.2.5",
     "@types/express": "^5.0.1",
     "@types/jasmine": "^5.1.7",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.14.0",
     "jasmine-core": "^5.6.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.3"
   }
 }
