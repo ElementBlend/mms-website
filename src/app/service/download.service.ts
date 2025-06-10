@@ -14,6 +14,7 @@ export class DownloadService {
   private modpackStatus$: Observable<boolean | 'error'> = this.modpackStatusSubject.asObservable();
   private backendDomain: string = environment.backendDomain;
   private backendPort: number = environment.backendPort;
+  private defaultVersion: number = 20;
   private modpackVersions: number[] = [];
   private modpackNames: string[] = [];
 
@@ -71,6 +72,10 @@ export class DownloadService {
     return this.modpackStatus$;
   }
 
+  getDefaultVersion(): number {
+    return this.defaultVersion;
+  }
+
   getModpackVersions(): number[] {
     return this.modpackVersions;
   }
@@ -91,7 +96,7 @@ export class DownloadService {
 
   private truncModpackVersion(index: number): number {
     if (this.modpackVersions.length === 0) { // Prevent initial 404 data
-      return 19;
+      return this.defaultVersion;
     }
     return Math.trunc(this.modpackVersions[index]);
   }

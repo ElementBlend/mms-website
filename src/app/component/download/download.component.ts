@@ -53,8 +53,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (received: boolean | 'error') => {
         if (received === true) {
-          this.selectedIndex = this.getModpackVersions().length - 1;
-          // this.selectedIndex = 0; // Use it only when the current modpack version is negative
+          this.selectedIndex = (this.downloadService.getDefaultVersion() > 0) ? (this.getModpackVersions().length - 1) : 0;
           this.isDownloadEnabled = true;
         } else if (received === 'error') {
           console.error("Failed to get modpack status from the server.");
