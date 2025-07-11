@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnInit, OnDestroy, PLATFORM_ID, Renderer2 } from '@angular/core';
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { HeaderComponent } from './component/header/header.component';
@@ -8,7 +8,7 @@ import { FooterComponent } from './component/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
