@@ -11,8 +11,8 @@
       <div class="column is-one-quarter">
         <div class="card">
           <div class="card-image">
-            <figure class="image is-4by3">
-              <img [src]="getContributerAvatars(idx)" alt="{{ name }} Image">
+            <figure class="image is-1by1">
+              <a href="{{getContributerGithubUrls(idx)}}" target="_blank"><img [src]="getContributerAvatars(idx)" alt="{{ name }} Github Avatar Image"></a>
             </figure>
           </div>
           <div class="card-content">

@@ -58,6 +58,10 @@ export class ContributeComponent implements OnInit {
     return this.contributerAvatars[index];
   }
 
+  protected getContributerGithubUrls(index: number): String {
+    return "https://github.com/" + this.contributerNames[index];
+  }
+
   protected getContributerRoles(index: number): String {
     return this.contributerRoles[index];
   }
