@@ -1,6 +1,6 @@
 {
   "name": "@samlam140330/mms-website",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "For semi-private discord Minecraft Modding Survival server website use.",
   "homepage": "https://github.com/ElementBlend/mms-website#readme",
   "bugs": {
@@ -13,6 +13,7 @@
   },
   "author": "SamLam140330",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,18 +22,17 @@
     "test": "ng test",
     "serve:ssr:mms-website": "node dist/mms-website/server/server.mjs"
   },
-  "private": true,
   "dependencies": {
-    "@angular/animations": "~21.1.4",
-    "@angular/common": "~21.1.4",
-    "@angular/compiler": "~21.1.4",
-    "@angular/core": "~21.1.4",
-    "@angular/forms": "~21.1.4",
-    "@angular/platform-browser": "~21.1.4",
-    "@angular/platform-browser-dynamic": "~21.1.4",
-    "@angular/platform-server": "~21.1.4",
-    "@angular/router": "~21.1.4",
-    "@angular/ssr": "~21.1.4",
+    "@angular/animations": "~21.2.0",
+    "@angular/common": "~21.2.0",
+    "@angular/compiler": "~21.2.0",
+    "@angular/core": "~21.2.0",
+    "@angular/forms": "~21.2.0",
+    "@angular/platform-browser": "~21.2.0",
+    "@angular/platform-browser-dynamic": "~21.2.0",
+    "@angular/platform-server": "~21.2.0",
+    "@angular/router": "~21.2.0",
+    "@angular/ssr": "~21.2.0",
     "@samlam140330/bulma-switch": "^1.0.2",
     "@samlam140330/bulma-timeline": "^1.0.3",
     "bulma": "^1.0.4",
@@ -40,21 +40,21 @@
     "ngx-cookie-service": "~21.1.0",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
-    "zone.js": "~0.16.0"
+    "zone.js": "~0.16.1"
   },
   "devDependencies": {
-    "@angular/build": "^21.1.4",
-    "@angular/cli": "~21.1.4",
-    "@angular/compiler-cli": "~21.1.4",
+    "@angular/build": "^21.2.0",
+    "@angular/cli": "~21.2.0",
+    "@angular/compiler-cli": "~21.2.0",
     "@types/express": "^5.0.6",
-    "@types/jasmine": "^5.1.15",
-    "@types/node": "^25.2.3",
-    "jasmine-core": "^5.13.0",
+    "@types/jasmine": "^6.0.0",
+    "@types/node": "^25.3.2",
+    "jasmine-core": "^6.1.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "karma-jasmine-html-reporter": "~2.2.0",
     "typescript": "~5.9.3"
   }
 }
