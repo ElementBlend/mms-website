@@ -14,7 +14,7 @@ export class DownloadService {
   private modpackStatus$: Observable<boolean | 'error'> = this.modpackStatusSubject.asObservable();
   private backendDomain: string = environment.backendDomain;
   private backendPort: number = environment.backendPort;
-  private defaultVersion: number = 21;
+  private defaultVersion: number = 22;
   private modpackVersions: number[] = [];
   private modpackNames: string[] = [];
 
