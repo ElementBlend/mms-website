@@ -15,14 +15,16 @@ export const routes: Routes = [
   {
     path: 'download',
     title: 'Modpack Download - MMS - Elementblend',
-    loadComponent: () => import('./component/download/download.component').then(m => m.DownloadComponent)
-    // canActivate: [authGuard]
+    loadComponent: () => import('./component/download/download.component').then(m => m.DownloadComponent),
+    // canActivate: [authGuard],
+    // canLoad: [authGuard]
   },
   {
     path: 'installation',
     title: 'Installation Guide - MMS - Elementblend',
-    loadComponent: () => import('./component/installation/installation.component').then(m => m.InstallationComponent)
-    // canActivate: [authGuard]
+    loadComponent: () => import('./component/installation/installation.component').then(m => m.InstallationComponent),
+    // canActivate: [authGuard],
+    // canLoad: [authGuard]
   },
   {
     path: 'contribute',
