@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, OnDestroy, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, OnDestroy, PLATFORM_ID, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -10,6 +10,7 @@ import { FooterComponent } from './component/footer/footer.component';
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.scss'
 })
 

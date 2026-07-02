@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { LoginService } from '../../service/login.service';
 import { MetaControllerService } from '../../service/meta-controller.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
   selector: 'app-login',
   imports: [],
   templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {

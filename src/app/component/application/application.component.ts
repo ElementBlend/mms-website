@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MetaControllerService } from '../../service/meta-controller.service';
 import { ApplicationService } from '../../service/application.service';
@@ -8,6 +8,7 @@ import { IApplicationStatusResponse } from '../../interface/application-status-r
   selector: 'app-application',
   imports: [],
   templateUrl: './application.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './application.component.scss'
 })
 export class ApplicationComponent implements OnInit, OnDestroy {

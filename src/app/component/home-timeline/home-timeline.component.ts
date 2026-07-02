@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { TimelineModpackService } from '../../service/timeline-modpack.service';
@@ -9,6 +9,7 @@ import { ITimelineResponse } from '../../interface/timeline-response';
   selector: 'app-timeline-modpack',
   imports: [CommonModule],
   templateUrl: './home-timeline.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home-timeline.component.scss'
 })
 export class HomeTimelineComponent implements OnInit, OnDestroy {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { CertificateService } from '../../service/certificate.service';
@@ -14,6 +14,7 @@ import { IHashResponse } from '../../interface/hash-response';
     CommonModule
   ],
   templateUrl: './certificate.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './certificate.component.scss'
 })
 export class CertificateComponent implements OnInit, OnDestroy {

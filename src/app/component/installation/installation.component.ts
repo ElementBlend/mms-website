@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChildren, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { LoginService } from './../../service/login.service';
@@ -16,6 +16,7 @@ import { PermissionDirective } from '../../directive/permission.directive';
     PermissionDirective
   ],
   templateUrl: './installation.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './installation.component.scss'
 })
 export class InstallationComponent implements OnInit {

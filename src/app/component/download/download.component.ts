@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { DownloadService } from '../../service/download.service';
@@ -16,6 +16,7 @@ import { IHashResponse } from '../../interface/hash-response';
     PermissionDirective
   ],
   templateUrl: './download.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './download.component.scss'
 })
 export class DownloadComponent implements OnInit, OnDestroy {

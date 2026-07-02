@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MetaControllerService } from '../../service/meta-controller.service';
 
@@ -6,6 +6,7 @@ import { MetaControllerService } from '../../service/meta-controller.service';
   selector: 'app-page-not-found',
   imports: [RouterModule],
   templateUrl: './page-not-found.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './page-not-found.component.scss'
 })
 export class PageNotFoundComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { HomeTimelineComponent } from '../home-timeline/home-timeline.component';
 import { HomeInfoComponent } from '../home-info/home-info.component';
 import { MetaControllerService } from './../../service/meta-controller.service';
@@ -10,6 +10,7 @@ import { MetaControllerService } from './../../service/meta-controller.service';
     HomeInfoComponent
   ],
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {

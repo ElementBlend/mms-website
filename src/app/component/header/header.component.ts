@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { NavbarHeaderService } from '../../service/navbar-header.service';
@@ -10,6 +10,7 @@ import { INavbar } from '../../interface/navbar';
   selector: 'app-header',
   imports: [RouterModule],
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit, OnDestroy {

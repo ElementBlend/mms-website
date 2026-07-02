@@ -1,10 +1,11 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { MetaControllerService } from '../../service/meta-controller.service';
 
 @Component({
   selector: 'app-contribute',
   imports: [],
   templateUrl: './contribute.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './contribute.component.scss'
 })
 export class ContributeComponent implements OnInit {

@@ -1,10 +1,11 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-forbidden',
   imports: [RouterModule],
   templateUrl: './forbidden.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './forbidden.component.scss'
 })
 export class ForbiddenComponent implements OnInit {
