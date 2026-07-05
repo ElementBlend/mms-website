@@ -17,7 +17,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && node ./src/patch-sri-link.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:mms-website": "node dist/mms-website/server/server.mjs"

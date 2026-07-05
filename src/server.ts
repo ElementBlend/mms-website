@@ -18,12 +18,12 @@ export function app(): express.Express {
   server.set('views', browserDistFolder);
 
   // Serve static files from /browser
-  server.get('*.*', express.static(browserDistFolder, {
+  server.get('/{*splat}.{*ext}', express.static(browserDistFolder, {
     maxAge: '1y'
   }));
 
   // All regular routes use the Angular engine
-  server.get('*', (req, res, next) => {
+  server.get('/{*splat}', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
     commonEngine
       .render({
